@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+:root {
+    --primary-red: #8B0000;
+    --bg-cream: #FDF9F2;
+    --card-white: #FFFFFF;
+    --text-dark: #333333;
+    --input-bg: #FFFFFF;
+    --luxury-shadow: 0 40px 120px rgba(0, 0, 0, 0.2);
+}
+
+body,
+html,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Full-Screen Background Section */
+.background-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #FDF5E6;
+    /* SOFT BEIGE/CREAM BACKGROUND BEHIND CARD */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10%;
+    /* SHIFTED FURTHER LEFT PER USER REQUEST */
+    /* MAINTAINED POSITION */
+    padding-right: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Left-Side Background Image Panel */
+.background-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* ABSOLUTE ZERO OFFSET */
+    width: 65%;
+    /* INCREASED FROM 45% FOR BETTER IMAGE PROMINENCE */
+    height: 100%;
+    background-image: url('../../assets/auth/wedding.jpeg');
+    background-size: cover;
+    background-position: left center;
+    /* ENSURE CONTENT ALIGNS TO PANEL LEFT */
+    z-index: 0;
+    display: block;
+    margin: 0;
+    /* ELIMINATE ANY POTENTIAL MARGINS */
+    padding: 0;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+    /* SHARP DIAGONAL (TIRPI) SEPARATION */
+}
+
+
+/* Compact Floating Card Overlay */
+.floating-compact-card {
+    position: relative;
+    width: 1080px;
+    /* ENLARGED FROM 960px */
+    /* INCREASED FROM 800px FOR PREMIUM HORIZONTAL LOOK */
+    max-width: 90%;
+    height: auto;
+    min-height: 600px;
+    /* ENLARGED FROM 520px */
+    background-color: var(--bg-cream);
+    border-radius: 40px;
+    border: 10px solid #F5EEE0;
+    /* Luxury decorative frame border */
+    box-shadow: var(--luxury-shadow);
+    z-index: 10;
+    display: flex;
+    overflow: hidden;
+    box-sizing: border-box;
+    align-items: stretch;
+    /* Ensuring equal height for children */
+}
+
+/* Internal Card Partition - Left (Image area, 50%) */
+.card-left-partition {
+    flex: 0 0 55%;
+    /* SLIGHT OVERLAP FOR ANGLE */
+    background-color: var(--bg-cream);
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+    /* Elegant diagonal cut */
+    z-index: 2;
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.03);
+    /* Subtle blended edge */
+}
+
+.preview-image-container {
+    width: 100%;
+    height: 100%;
+    /* FORCING 100% OF PARTITION HEIGHT */
+    display: flex;
+    /* ENSURING INTERNAL STRETCH */
+    overflow: hidden;
+    position: relative;
+    box-shadow: none;
+}
+
+.preview-img-inside {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    /* ENSURE ABSOLUTE VERTICAL FILL */
+    object-fit: cover;
+    /* FULL COVERAGE WITHOUT GAPS */
+    display: block;
+}
+
+/* Internal Card Partition - Right (Form Area, 50%) */
+.card-right-partition {
+    flex: 0 0 45%;
+    /* ADJUSTED FOR LEFT OVERLAP */
+    background-color: var(--bg-cream);
+    padding: 50px 60px 40px 40px;
+    /* INCREASED BUFFER FROM EDGES */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Vertically centered content */
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Preventing any internal element spill */
+    margin-left: -5%;
+    /* Pulling closer to eliminate gap from angle */
+}
+
+/* Top Nav Area Inside Card */
+.card-internal-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-left: 15px;
+    /* SHIFTING LOGO RIGHT TO CLEAR ANGLE */
+}
+
+.nav-logo-compact {
+    height: 30px;
+}
+
+.nav-lang-selector-pill {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #444;
+    letter-spacing: 0.4px;
+}
+
+/* Content Area Inside form partitioning */
+.signup-form-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.heading-wrapper-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.heading-text-welcome {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--primary-red);
+    margin: 0;
+}
+
+.kalash-icon-inline {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.subtitle-entry-text {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Form Groups & Inputs */
+.mobile-input-group {
+    margin-bottom: 22px;
+}
+
+.rounded-form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid #EAEAEA;
+    border-radius: 14px;
+    background: #FFFFFF;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.rounded-form-input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.05);
+}
+
+/* Button Stacking */
+.action-buttons-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-primary-otp {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-red);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(139, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.btn-primary-otp:hover {
+    background: #a00000;
+    transform: translateY(-1.5px);
+    box-shadow: 0 12px 25px rgba(139, 0, 0, 0.3);
+}
+
+.btn-google-bordered {
+    width: 100%;
+    padding: 14px;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-google-bordered:hover {
+    background: #F9F9F9;
+}
+
+/* Footer Section Card */
+.auth-footer-link-text {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 13.5px;
+    color: #666;
+}
+
+.auth-footer-link-text a {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+@media (max-width: 900px) {
+    .card-left-partition {
+        display: none;
+    }
+
+    .floating-compact-card {
+        width: 420px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .background-wrapper {
+        justify-content: center;
+        padding-right: 0;
+    }
+}
