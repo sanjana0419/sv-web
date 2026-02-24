@@ -1,7 +1,7 @@
 import React from 'react';
 import './Signup.css';
 import weddingBg from '../../assets/auth/wedding.jpeg';
-import logoImg from '../../assets/auth/logo.png';
+import logoImg from '../../assets/auth/logo_v2.png';
 import kalashImg from '../../assets/auth/kalash.jpg';
 
 const Signup = () => {
