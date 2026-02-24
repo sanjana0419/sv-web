@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { useAuth, AUTH_VIEWS } from '../AuthContext';
 import { useOtpInput } from '../hooks/useOtpInput';
+import dividerImg from '../../../assets/auth/divider.png';
+
 
 const OTP_BACK_MAP = {
     [AUTH_VIEWS.OTP_LOGIN]: AUTH_VIEWS.LOGIN,
@@ -21,6 +23,8 @@ const OtpView = () => {
         if (!isComplete) return;
         if (view === AUTH_VIEWS.OTP_FORGOT) {
             navigate(AUTH_VIEWS.RESET_PASSWORD);
+        } else if (view === AUTH_VIEWS.OTP_SIGNUP) {
+            navigate(AUTH_VIEWS.CREATE_PASSWORD);
         } else {
             alert('Verified!');
         }
@@ -62,6 +66,9 @@ const OtpView = () => {
             >
                 Verify OTP
             </button>
+            <div className="auth-divider-flourish">
+                <img src={dividerImg} alt="" />
+            </div>
             <p className="auth-footer">
                 <a href="#" onClick={handleBack}>Back</a>
             </p>

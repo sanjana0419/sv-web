@@ -9,15 +9,16 @@ export const AUTH_VIEWS = {
     OTP_SIGNUP: 'OTP_SIGNUP',
     OTP_FORGOT: 'OTP_FORGOT',
     RESET_PASSWORD: 'RESET_PASSWORD',
+    CREATE_PASSWORD: 'CREATE_PASSWORD',
 };
 
 const AuthContext = createContext(null);
 
 const initialState = {
-    view: AUTH_VIEWS.LOGIN,
+    view: AUTH_VIEWS.SIGNUP,
     prevView: null,
     formData: {
-        phone: '',
+        contact: '',
         password: '',
         confirmPassword: ''
     },

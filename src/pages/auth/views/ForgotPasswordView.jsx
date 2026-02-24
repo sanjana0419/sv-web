@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import { Mail, Phone, ArrowLeft } from 'lucide-react';
 import { useAuth, AUTH_VIEWS } from '../AuthContext';
 import { useFormValidation } from '../hooks/useFormValidation';
+import dividerImg from '../../../assets/auth/divider.png';
+
 
 const ForgotPasswordView = () => {
     const { formData, setField, navigate } = useAuth();
@@ -35,6 +37,9 @@ const ForgotPasswordView = () => {
                     {errors.phone && <span className="field-error">{errors.phone}</span>}
                 </div>
                 <button type="submit" className="auth-btn-primary">Send OTP</button>
+                <div className="auth-divider-flourish">
+                    <img src={dividerImg} alt="" />
+                </div>
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                     <a href="#" onClick={(e) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer">
                         <ArrowLeft size={14} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> Back to Login

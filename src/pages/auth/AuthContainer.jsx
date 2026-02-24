@@ -10,6 +10,7 @@ const SignupView = lazy(() => import('./views/SignupView'));
 const ForgotPasswordView = lazy(() => import('./views/ForgotPasswordView'));
 const OtpView = lazy(() => import('./views/OtpView'));
 const ResetPasswordView = lazy(() => import('./views/ResetPasswordView'));
+const CreatePasswordView = lazy(() => import('./views/CreatePasswordView'));
 
 // View component map — avoids switch statements
 const VIEW_COMPONENTS = {
@@ -20,6 +21,7 @@ const VIEW_COMPONENTS = {
     [AUTH_VIEWS.OTP_SIGNUP]: OtpView,
     [AUTH_VIEWS.OTP_FORGOT]: OtpView,
     [AUTH_VIEWS.RESET_PASSWORD]: ResetPasswordView,
+    [AUTH_VIEWS.CREATE_PASSWORD]: CreatePasswordView,
 };
 
 // Loading fallback for Suspense

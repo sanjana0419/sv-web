@@ -182,11 +182,13 @@ html,
     width: 100%;
     height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: 200px;
     align-items: center;
     position: relative;
     overflow: hidden;
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .auth-page-wrapper::before {
@@ -194,15 +196,13 @@ html,
     position: absolute;
     top: 0;
     left: 0;
-    width: 85%;
-    /* Wider image container */
+    width: 70%;
+    /* Overlap slightly to ensure no gaps */
     height: 100%;
     background-image: url('../../assets/auth/wedding.jpeg');
     background-size: cover;
-    background-position: 60% center;
-    /* Shifted image left */
-    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-    /* Sharper split further right */
+    background-position: 5% 20%;
+    /* Shifted further left to frame faces better */
     z-index: 0;
 }
 
@@ -211,12 +211,12 @@ html,
     position: absolute;
     top: 0;
     right: 0;
-    width: 32%;
-    /* Slimmer tan section */
+    width: 45%;
+    /* Covers the right side and overlaps image */
     height: 100%;
     background-color: var(--bg-tan);
-    clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
-    z-index: 0;
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);
+    z-index: 1;
 }
 
 /* Main Container - Adjusted Dimensions for a More Compact Look */
@@ -254,19 +254,16 @@ html,
     position: absolute;
     top: 0;
     right: 0;
-    width: 60%;
-    /* Occupies the right portion */
+    width: 50%;
+    /* Perfectly equal 50/50 split inside the card */
     height: 100%;
     background-color: #FFFFE4;
-    /* Figma AKSHID color */
-    padding: 40px 120px;
-    /* Reduced vertical padding */
+    padding: 40px 60px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     z-index: 11;
-    clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
-    /* Shallower slant */
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -294,7 +291,7 @@ html,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     /* Reduced from 30px */
     position: relative;
     z-index: 2;
@@ -327,12 +324,10 @@ html,
 
 .welcome-title {
     font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    /* Slightly refined for smaller height */
+    font-size: 45px;
     color: var(--primary-maroon);
-    margin: 5px 0;
-    /* Tighter vertical spacing */
-    font-weight: 800;
+    margin: -10px 0 10px;
+    font-weight: 900;
 }
 
 .auth-subtitle {
@@ -345,7 +340,8 @@ html,
 
 /* Pixel-perfect form elements */
 .form-group {
-    margin-bottom: 12px;
+    margin: 0 auto 12px;
+    width: 380px;
     position: relative;
 }
 
@@ -434,7 +430,8 @@ html,
 
 /* Google Pill Button */
 .google-btn-pill {
-    width: 100%;
+    width: 240px;
+    margin: 0 auto 0;
     padding: 12px;
     background: #fff;
     border: 1px solid #E6D5B8;
@@ -448,7 +445,6 @@ html,
     color: var(--primary-maroon);
     cursor: pointer;
     transition: all 0.2s;
-    margin-bottom: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
@@ -460,24 +456,27 @@ html,
 /* Decorative Flourish */
 .auth-divider-flourish {
     text-align: center;
-    margin-bottom: 20px;
-    opacity: 0.6;
+    margin-top: -64px;
+    margin-bottom: 0px;
+    opacity: 1;
 }
 
 .auth-divider-flourish img {
-    height: 25px;
+    height: 190px;
     object-fit: contain;
 }
 
 /* Primary Login Button */
 .auth-btn-primary {
-    width: 100%;
-    padding: 14px;
+    width: 240px;
+    margin: -70px auto 15px;
+    display: block;
+    padding: 12px 20px;
     background: linear-gradient(135deg, var(--primary-maroon) 0%, #500000 100%);
     color: #fff;
     border: none;
     border-radius: 50px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
@@ -524,147 +523,7 @@ html,
     opacity: 0.25;
 }
 
-.auth-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    position: relative;
-    z-index: 1;
-}
 
-.auth-logo-small {
-    height: 50px;
-}
-
-.auth-lang {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-light);
-}
-
-.auth-form-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-}
-
-.welcome-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    color: var(--primary-maroon);
-    margin: 0;
-    font-weight: 700;
-}
-
-.auth-subtitle {
-    font-size: 14px;
-    color: var(--text-light);
-    margin-bottom: 25px;
-    margin-top: 5px;
-}
-
-/* Form Elements */
-.form-group {
-    margin-bottom: 15px;
-    position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--primary-maroon);
-    width: 18px;
-    height: 18px;
-}
-
-.auth-input {
-    width: 100%;
-    padding: 15px 20px 15px 45px;
-    border: 1px solid var(--input-border);
-    border-radius: 50px;
-    background-color: #fff;
-    font-size: 14px;
-    outline: none;
-    transition: all 0.3s;
-}
-
-.auth-input:focus {
-    border-color: var(--primary-maroon);
-    box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05);
-}
-
-.forgot-link-container {
-    text-align: right;
-    margin-top: -10px;
-    margin-bottom: 20px;
-}
-
-.forgot-link {
-    color: var(--primary-maroon);
-    font-size: 12px;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.auth-btn-primary {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(to right, var(--primary-maroon), #a00000);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
-    transition: all 0.3s;
-    margin-bottom: 15px;
-}
-
-.auth-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(128, 0, 0, 0.3);
-}
-
-.google-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ddd;
-    margin: 0 auto;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.google-btn:hover {
-    background-color: #f5f5f5;
-}
-
-.auth-footer {
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-light);
-    margin-top: 20px;
-}
-
-.auth-footer a {
-    color: var(--primary-maroon);
-    text-decoration: none;
-    font-weight: 700;
-}
 
 /* OTP Input Boxes */
 .otp-container {

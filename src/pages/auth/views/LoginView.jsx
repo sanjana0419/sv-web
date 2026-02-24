@@ -2,10 +2,12 @@ import React, { useCallback } from 'react';
 import { Mail, Phone, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth, AUTH_VIEWS } from '../AuthContext';
 import { useFormValidation } from '../hooks/useFormValidation';
+import dividerImg from '../../../assets/auth/divider.png';
+
 
 const LoginView = () => {
     const { formData, showPass, setField, togglePass, navigate } = useAuth();
-    const { errors, touchField, validateAll } = useFormValidation(formData, ['phone', 'password']);
+    const { errors, touchField, validateAll } = useFormValidation(formData, ['contact', 'password']);
 
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
@@ -25,14 +27,14 @@ const LoginView = () => {
                     <Mail className="input-icon" size={18} />
                     <input
                         type="text"
-                        className={`auth-input ${errors.phone ? 'input-error' : ''}`}
+                        className={`auth-input ${errors.contact ? 'input-error' : ''}`}
                         placeholder="Email / Phone Number"
-                        value={formData.phone}
-                        onChange={(e) => setField('phone', e.target.value)}
-                        onBlur={() => touchField('phone')}
+                        value={formData.contact}
+                        onChange={(e) => setField('contact', e.target.value)}
+                        onBlur={() => touchField('contact')}
                         required
                     />
-                    {errors.phone && <span className="field-error">{errors.phone}</span>}
+                    {errors.contact && <span className="field-error">{errors.contact}</span>}
                 </div>
                 <div className="form-group">
                     <Lock className="input-icon" size={18} />
@@ -66,7 +68,7 @@ const LoginView = () => {
                 </button>
 
                 <div className="auth-divider-flourish">
-                    <img src="../../assets/auth/landing_divider.png" alt="" />
+                    <img src={dividerImg} alt="" />
                 </div>
 
                 <button type="submit" className="auth-btn-primary">Log In</button>
