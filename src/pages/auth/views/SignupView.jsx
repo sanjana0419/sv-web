@@ -19,9 +19,18 @@ const SignupView = () => {
     return (
         <div style={{ paddingTop: '0px' }}>
             <div className="title-row" style={{ justifyContent: 'center' }}>
-                <h1 className="welcome-title" style={{ textAlign: 'center' }}>Welcome</h1>
+                <h1 className="welcome-title" style={{ textAlign: 'center', fontSize: '40px' }}>Welcome</h1>
             </div>
-            <p className="auth-subtitle" style={{ textAlign: 'center' }}>Create your account to continue</p>
+            <p className="auth-subtitle" style={{
+                textAlign: 'center',
+                fontStyle: 'italic',
+                color: '#D4AF37',
+                fontSize: '14px',
+                fontFamily: "'Montserrat', sans-serif",
+                fontWeight: '500'
+            }}>
+                "where meaningful matches begin"
+            </p>
             <form onSubmit={handleSubmit}>
 
                 <div className="form-group">
@@ -38,11 +47,11 @@ const SignupView = () => {
                     {errors.contact && <span className="field-error">{errors.contact}</span>}
                 </div>
 
-                <div className="or-divider">
-                    <span className="or-text">OR</span>
+                <div className="or-divider" style={{ marginTop: '7px' }}>
+                    <span className="or-text">or</span>
                 </div>
 
-                <button type="button" className="google-btn-pill">
+                <button type="button" className="google-btn-pill" style={{ marginTop: '-15px' }}>
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" alt="Google" />
                     <span>Join with Google</span>
                 </button>

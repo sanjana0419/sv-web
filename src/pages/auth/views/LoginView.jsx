@@ -12,16 +12,13 @@ const LoginView = () => {
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
         if (validateAll()) {
-            navigate(AUTH_VIEWS.OTP_LOGIN);
+            navigate(AUTH_VIEWS.HOME);
         }
     }, [validateAll, navigate]);
 
     return (
         <>
-            <div className="title-row">
-                <h1 className="welcome-title">Log In</h1>
-            </div>
-            <p className="auth-subtitle">Verify your identity to access your account.</p>
+
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <Mail className="input-icon" size={18} />

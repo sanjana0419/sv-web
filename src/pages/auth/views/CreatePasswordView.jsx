@@ -12,12 +12,12 @@ const CreatePasswordView = () => {
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
         if (validateAll()) {
-            navigate(AUTH_VIEWS.LOGIN);
+            navigate(AUTH_VIEWS.HOME);
         }
     }, [validateAll, navigate]);
 
     return (
-        <>
+        <div style={{ paddingTop: '80px' }}>
             <div className="title-row" style={{ justifyContent: 'center' }}>
                 <h1 className="welcome-title" style={{ textAlign: 'center' }}>Create new Password</h1>
             </div>
@@ -57,12 +57,12 @@ const CreatePasswordView = () => {
                     </div>
                     {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
                 </div>
-                <button type="submit" className="auth-btn-primary">Create Account</button>
                 <div className="auth-divider-flourish">
                     <img src={dividerImg} alt="" />
                 </div>
+                <button type="submit" className="auth-btn-primary">Create Account</button>
             </form>
-        </>
+        </div>
     );
 };
 

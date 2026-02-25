@@ -10,6 +10,7 @@ export const AUTH_VIEWS = {
     OTP_FORGOT: 'OTP_FORGOT',
     RESET_PASSWORD: 'RESET_PASSWORD',
     CREATE_PASSWORD: 'CREATE_PASSWORD',
+    HOME: 'HOME',
 };
 
 const AuthContext = createContext(null);
@@ -59,9 +60,7 @@ export function AuthProvider({ children }) {
     const [isPending, startTransition] = useTransition();
 
     const navigate = useCallback((targetView) => {
-        startTransition(() => {
-            dispatch({ type: 'NAVIGATE', payload: targetView });
-        });
+        dispatch({ type: 'NAVIGATE', payload: targetView });
     }, []);
 
     const setField = useCallback((field, value) => {

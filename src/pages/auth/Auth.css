@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap');
 
 :root {
-    --primary-maroon: #800000;
+    --primary-maroon: #cb1111;
+    /* Changed from maroon to vibrant red */
     --accent-gold: #D4AF37;
     --bg-tan: #D2B48C;
     --card-bg: #FFFBF2;
@@ -298,8 +299,9 @@ html,
 }
 
 .auth-logo-small {
-    height: 55px;
-    /* Scaled down for smaller card */
+    height: 100px;
+    margin-top: 50px;
+    /* Move logo downward */
 }
 
 .auth-lang {
@@ -317,24 +319,27 @@ html,
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Changed from center to prevent mutual cropping */
     position: relative;
     z-index: 2;
+    padding-top: 40px;
+    /* Reduced to leave more space for the footer */
 }
 
 .welcome-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 45px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
     color: var(--primary-maroon);
-    margin: -10px 0 10px;
-    font-weight: 900;
+    margin: -10px 0 0px;
+    font-weight: 600;
 }
 
 .auth-subtitle {
     font-size: 13px;
     color: var(--text-muted);
-    margin-bottom: 25px;
-    margin-top: 5px;
+    margin-bottom: 15px;
+    margin-top: 0px;
     letter-spacing: 0.2px;
 }
 
@@ -347,7 +352,7 @@ html,
 
 .auth-input {
     width: 100%;
-    padding: 14px 25px 14px 45px;
+    padding: 10px 25px 10px 45px;
     border-radius: 50px;
     border: 1px solid #E6D5B8;
     background-color: #fff;
@@ -364,7 +369,31 @@ html,
 
 .auth-input:focus {
     border-color: var(--primary-maroon);
-    box-shadow: 0 0 10px rgba(125, 10, 10, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.input-icon-wrapper {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary-maroon);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
+.input-icon-inner {
+    color: #fff;
+    opacity: 1;
+}
+
+.pass-toggle-icon {
+    color: var(--primary-maroon);
 }
 
 .input-icon {
@@ -408,8 +437,10 @@ html,
 .or-divider {
     display: flex;
     align-items: center;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: -30px;
     margin-bottom: 20px;
-    position: relative;
 }
 
 .or-divider::before,
@@ -417,22 +448,22 @@ html,
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, #D0B8A8, transparent);
-    opacity: 0.5;
+    background: #E57373;
+    opacity: 0.6;
 }
 
 .or-text {
     padding: 0 15px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--primary-maroon);
 }
 
 /* Google Pill Button */
 .google-btn-pill {
-    width: 240px;
+    width: 200px;
     margin: 0 auto 0;
-    padding: 12px;
+    padding: 8px;
     background: #fff;
     border: 1px solid #E6D5B8;
     border-radius: 50px;
@@ -459,6 +490,8 @@ html,
     margin-top: -64px;
     margin-bottom: 0px;
     opacity: 1;
+    pointer-events: none;
+    /* Critical: Prevent blocking button clicks */
 }
 
 .auth-divider-flourish img {
@@ -468,7 +501,7 @@ html,
 
 /* Primary Login Button */
 .auth-btn-primary {
-    width: 240px;
+    width: 220px;
     margin: -70px auto 15px;
     display: block;
     padding: 12px 20px;
@@ -490,16 +523,17 @@ html,
 
 .auth-footer {
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-muted);
     font-weight: 500;
-    margin-top: 15px;
+    margin-top: 5px;
 }
 
 .auth-footer a {
     color: var(--primary-maroon);
     text-decoration: none;
     font-weight: 800;
+    font-size: 15px;
     text-transform: capitalize;
 }
 
@@ -529,12 +563,14 @@ html,
 .otp-container {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 25px;
+    margin: 25px auto 10px;
+    width: 280px;
+    /* Limited width for smaller boxes */
 }
 
 .otp-box {
-    width: 45px;
-    height: 55px;
+    width: 35px;
+    height: 45px;
     border: 1px solid var(--input-border);
     border-radius: 10px;
     text-align: center;
@@ -591,6 +627,17 @@ html,
     width: 28px;
     height: 28px;
     margin-left: 10px;
+}
+
+/* Full Page Home View */
+.home-full-page-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: #FFFFE4;
 }
 
 /* View Transition Animations */

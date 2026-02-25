@@ -11,7 +11,7 @@ const OTP_BACK_MAP = {
 };
 
 const OtpView = () => {
-    const { view, navigate } = useAuth();
+    const { view, navigate, formData } = useAuth();
     const { otpRefs, otp, handleChange, handleKeyDown, handlePaste, isComplete, reset } = useOtpInput(6);
 
     // Auto-focus first OTP box on mount
@@ -21,12 +21,22 @@ const OtpView = () => {
 
     const handleVerify = useCallback(() => {
         if (!isComplete) return;
-        if (view === AUTH_VIEWS.OTP_FORGOT) {
-            navigate(AUTH_VIEWS.RESET_PASSWORD);
-        } else if (view === AUTH_VIEWS.OTP_SIGNUP) {
-            navigate(AUTH_VIEWS.CREATE_PASSWORD);
-        } else {
-            alert('Verified!');
+
+        // Determine target view based on flow source
+        switch (view) {
+            case AUTH_VIEWS.OTP_FORGOT:
+                navigate(AUTH_VIEWS.RESET_PASSWORD);
+                break;
+            case AUTH_VIEWS.OTP_SIGNUP:
+                navigate(AUTH_VIEWS.CREATE_PASSWORD);
+                break;
+            case AUTH_VIEWS.OTP_LOGIN:
+                // Success entry for existing user login
+                navigate(AUTH_VIEWS.HOME);
+                break;
+            default:
+                // If view state is lost or ambiguous, default to create password for safety in signup context
+                navigate(AUTH_VIEWS.CREATE_PASSWORD);
         }
     }, [isComplete, view, navigate]);
 
@@ -37,11 +47,13 @@ const OtpView = () => {
     }, [view, navigate, reset]);
 
     return (
-        <>
-            <div className="title-row">
-                <h1 className="welcome-title">Verify OTP</h1>
+        <div style={{ paddingTop: '70px' }}>
+            <div className="title-row" style={{ justifyContent: 'center' }}>
+                <h1 className="welcome-title" style={{ textAlign: 'center' }}>Verify OTP</h1>
             </div>
-            <p className="auth-subtitle">We've sent a 6-digit code to your registered mobile number.</p>
+            <p className="auth-subtitle" style={{ textAlign: 'center' }}>
+                We've sent a 6-digit code to {formData.contact}
+            </p>
             <div className="otp-container">
                 {otp.map((digit, i) => (
                     <input
@@ -63,16 +75,14 @@ const OtpView = () => {
                 className={`auth-btn-primary ${!isComplete ? 'btn-disabled' : ''}`}
                 onClick={handleVerify}
                 disabled={!isComplete}
+                style={{ margin: '30px auto 15px' }}
             >
                 Verify OTP
             </button>
             <div className="auth-divider-flourish">
                 <img src={dividerImg} alt="" />
             </div>
-            <p className="auth-footer">
-                <a href="#" onClick={handleBack}>Back</a>
-            </p>
-        </>
+        </div>
     );
 };
 
