@@ -159,14 +159,47 @@ html,
     height: 30px;
 }
 
-.nav-lang-selector-pill {
-    background: rgba(0, 0, 0, 0.05);
+.nav-lang-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     font-size: 11px;
-    font-weight: 700;
-    color: #444;
+    font-weight: 600;
+    color: var(--primary-red);
+    cursor: pointer;
+    outline: none;
+}
+
+.nav-lang-pill:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+    transform: translateY(-1px);
+}
+
+.nav-lang-flag {
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    font-size: 11px;
+}
+
+.nav-lang-text {
     letter-spacing: 0.4px;
+}
+
+.nav-lang-caret {
+    font-size: 9px;
+    margin-left: 2px;
 }
 
 /* Content Area Inside form partitioning */

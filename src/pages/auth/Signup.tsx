@@ -20,7 +20,15 @@ const Signup = () => {
                     {/* Card Top Branding Area */}
                     <div className="card-internal-nav">
                         <img src={logoImg} alt="Shubh Vivah Logo" className="nav-logo-compact" />
-                        <div className="nav-lang-selector-pill">EN | DL</div>
+                        <button type="button" className="nav-lang-pill">
+                            <span className="nav-lang-flag" aria-hidden="true">
+                                🇬🇧
+                            </span>
+                            <span className="nav-lang-text">EN</span>
+                            <span className="nav-lang-caret" aria-hidden="true">
+                                ▾
+                            </span>
+                        </button>
                     </div>
 
                     {/* Signup Content Area */}

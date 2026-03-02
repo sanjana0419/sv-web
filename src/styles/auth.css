@@ -262,8 +262,22 @@ html,
     flex-direction: column;
     justify-content: center;
     z-index: 11;
-    clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+    /* Base diagonal; the curved corner near the logo is created with ::before */
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+}
+
+.auth-right::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: -70px;
+    width: 180px;
+    height: 180px;
+    background-color: #FFFFE4;
+    border-radius: 50%;
+    /* This circular cap makes the divider line look like a smooth circular curve at the card's left corner near the logo */
+    z-index: -1;
 }
 
 /* ── Background Decoration: Kalash (center) + Haldi (bottom-left) + Kumkum (bottom-right) ── */
@@ -362,29 +376,54 @@ html,
 
 .auth-logo-small {
     height: 100px;
-    margin-top: -40px;
-    /* Moved further upward */
+    margin-top: -30px;
+    margin-left: 24px;
+    /* Slightly lower and to the right so it sits cleanly inside the new circular corner */
 }
 
-.auth-lang {
-    font-size: 13px;
+.auth-lang-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    font-size: 12px;
     font-weight: 600;
-    color: var(--text-muted);
-    background: rgba(0, 0, 0, 0.04);
-    padding: 6px 14px;
-    border-radius: 50px;
+    color: var(--primary-maroon);
     cursor: pointer;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    margin-top: -50px;
-    /* Moved upward to align with the logo's new higher position */
-    transition: all 0.3s ease;
+    outline: none;
+    margin-top: -30px;
+    margin-right: 12px;
 }
 
-.auth-lang:hover {
-    background: rgba(203, 17, 17, 0.1);
-    color: var(--primary-maroon);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(203, 17, 17, 0.1);
+.auth-lang-pill:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+    transform: translateY(-1px);
+}
+
+.auth-lang-flag {
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    font-size: 11px;
+}
+
+.auth-lang-text {
+    letter-spacing: 0.4px;
+}
+
+.auth-lang-caret {
+    font-size: 9px;
+    margin-left: 2px;
 }
 
 .auth-form-container {

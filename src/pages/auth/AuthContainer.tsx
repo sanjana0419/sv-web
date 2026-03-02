@@ -84,7 +84,15 @@ const AuthContent = () => {
                     </div>
                     <div className="auth-header">
                         <img src={logoImg} alt="Logo" className="auth-logo-small" />
-                        <div className="auth-lang">EN | HI</div>
+                        <button type="button" className="auth-lang-pill">
+                            <span className="auth-lang-flag" aria-hidden="true">
+                                🇬🇧
+                            </span>
+                            <span className="auth-lang-text">EN</span>
+                            <span className="auth-lang-caret" aria-hidden="true">
+                                ▾
+                            </span>
+                        </button>
                     </div>
                     <div ref={containerRef} className={`auth-form-container ${animClass}`}>
                         <Suspense fallback={<ViewLoader />}>
