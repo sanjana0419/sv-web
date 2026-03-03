@@ -14,9 +14,13 @@ const ForgotPasswordView = lazy(() => import('./forgot-password'));
 const OtpView = lazy(() => import('./otp'));
 const ResetPasswordView = lazy(() => import('./ResetPassword'));
 const CreatePasswordView = lazy(() => import('./CreatePassword'));
+const HomeView = lazy(() => import('../home/Home')); // ✅ Your homepage
 
 // View component map — avoids switch statements
-const VIEW_COMPONENTS: Record<AuthView, React.LazyExoticComponent<React.ComponentType<any>>> = {
+const VIEW_COMPONENTS: Record<
+    AuthView,
+    React.LazyExoticComponent<React.ComponentType<any>>
+> = {
     [AUTH_VIEWS.LOGIN]: LoginView,
     [AUTH_VIEWS.SIGNUP]: SignupView,
     [AUTH_VIEWS.FORGOT_PASSWORD]: ForgotPasswordView,
@@ -25,6 +29,7 @@ const VIEW_COMPONENTS: Record<AuthView, React.LazyExoticComponent<React.Componen
     [AUTH_VIEWS.OTP_FORGOT]: OtpView,
     [AUTH_VIEWS.RESET_PASSWORD]: ResetPasswordView,
     [AUTH_VIEWS.CREATE_PASSWORD]: CreatePasswordView,
+    [AUTH_VIEWS.HOME]: HomeView, // ✅ Added Home mapping
 };
 
 // Loading fallback for Suspense
@@ -57,23 +62,25 @@ const AuthContent = () => {
     }, [view, prevView]);
 
     // Memoize the active view component to avoid unnecessary re-renders
-    const ActiveView = useMemo(() => (VIEW_COMPONENTS[view] || LoginView) as React.LazyExoticComponent<React.ComponentType<any>>, [view]);
-
+    const ActiveView = useMemo(
+        () => (VIEW_COMPONENTS[view] || LoginView) as React.LazyExoticComponent<React.ComponentType<any>>,
+        [view]
+    );
 
     return (
         <div className="auth-page-wrapper">
             <div className="auth-card">
-                {/* Left: Transparent cutout to reveal the single background wedding image */}
+                {/* Left: Transparent cutout */}
                 <div className="auth-left"></div>
 
-                {/* Right: The premium form panel with Figma-spec background */}
+                {/* Right panel */}
                 <div className="auth-right">
-                    {/* Background decoration: kalash (center-top), haldi (bottom-left), kumkum (bottom-right) */}
                     <div className="auth-right-deco">
                         <img src={kalashImg} alt="" className="deco-kalash-bg" />
                         <img src={haldiKumkumImg} alt="" className="deco-haldi-bg" />
                         <img src={haldiKumkumImg} alt="" className="deco-kumkum-bg" />
                     </div>
+
                     <div className="auth-header">
                         <img src={logoImg} alt="Logo" className="auth-logo-small" />
                         <div className="auth-lang-switcher">
@@ -90,6 +97,7 @@ const AuthContent = () => {
                             ))}
                         </div>
                     </div>
+
                     <div ref={containerRef} className={`auth-form-container ${animClass}`}>
                         <Suspense fallback={<ViewLoader />}>
                             <ActiveView />

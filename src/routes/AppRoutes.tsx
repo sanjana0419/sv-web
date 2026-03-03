@@ -4,7 +4,7 @@ import LandingPage from '../pages/auth/LandingPage';
 import LoginPage from '../pages/auth/login';
 import RegisterPage from '../pages/auth/register';
 import ForgotPassword from '../pages/auth/forgot-password';
-import HomePage from '../pages/index';
+import HomePage from '../pages/home/Home';
 import AuthContainer from '../pages/auth/AuthContainer';
 
 const AppRoutes: React.FC = () => {
