@@ -67,6 +67,17 @@ const AuthContent = () => {
         [view]
     );
 
+    // Full-page Home view (bypass the auth card structure)
+    if (view === AUTH_VIEWS.HOME) {
+        return (
+            <div className="home-full-page-container">
+                <Suspense fallback={<ViewLoader />}>
+                    <ActiveView />
+                </Suspense>
+            </div>
+        );
+    }
+
     return (
         <div className="auth-page-wrapper">
             <div className="auth-card">

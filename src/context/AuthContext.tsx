@@ -10,6 +10,7 @@ export const AUTH_VIEWS = {
     OTP_FORGOT: 'OTP_FORGOT',
     RESET_PASSWORD: 'RESET_PASSWORD',
     CREATE_PASSWORD: 'CREATE_PASSWORD',
+    HOME: 'HOME',
 } as const;
 
 export type AuthView = keyof typeof AUTH_VIEWS;
