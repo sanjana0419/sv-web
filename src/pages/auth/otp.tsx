@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { AUTH_VIEWS, AuthView } from '../../context/AuthContext';
 import { useOtpInput } from '../../hooks/useOtpInput';
@@ -12,6 +13,7 @@ const OTP_BACK_MAP: Partial<Record<AuthView, AuthView>> = {
 
 const OtpVerification = () => {
     const { view, navigate, formData } = useAuth();
+    const routerNavigate = useNavigate();
     const { otpRefs, otp, handleChange, handleKeyDown, handlePaste, isComplete, reset } = useOtpInput(6);
 
     // Auto-focus first OTP box on mount
@@ -32,13 +34,13 @@ const OtpVerification = () => {
                 break;
             case AUTH_VIEWS.OTP_LOGIN:
                 // Success entry for existing user login
-                navigate(AUTH_VIEWS.HOME);
+                routerNavigate('/home');
                 break;
             default:
                 // If view state is lost or ambiguous, default to create password for safety in signup context
                 navigate(AUTH_VIEWS.CREATE_PASSWORD);
         }
-    }, [isComplete, view, navigate]);
+    }, [isComplete, view, navigate, routerNavigate]);
 
     const handleBack = useCallback((e: React.MouseEvent) => {
         e.preventDefault();

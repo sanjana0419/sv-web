@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { AUTH_VIEWS } from '../../context/AuthContext';
 import { useAuth } from '../../hooks/useAuth';
@@ -8,14 +9,15 @@ import dividerImg from '../../assets/auth/divider.png';
 
 const LoginPage = () => {
     const { formData, showPass, setField, togglePass, navigate } = useAuth();
+    const routerNavigate = useNavigate();
     const { errors, touchField, validateAll } = useFormValidation(formData, ['contact', 'password']);
 
     const handleSubmit = useCallback((e: React.FormEvent) => {
         e.preventDefault();
         if (validateAll()) {
-            navigate(AUTH_VIEWS.HOME);
+            routerNavigate('/home');
         }
-    }, [validateAll, navigate]);
+    }, [validateAll, routerNavigate]);
 
     return (
         <>

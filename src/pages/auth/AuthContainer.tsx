@@ -14,7 +14,6 @@ const ForgotPasswordView = lazy(() => import('./forgot-password'));
 const OtpView = lazy(() => import('./otp'));
 const ResetPasswordView = lazy(() => import('./ResetPassword'));
 const CreatePasswordView = lazy(() => import('./CreatePassword'));
-const HomeView = lazy(() => import('../index'));
 
 // View component map — avoids switch statements
 const VIEW_COMPONENTS: Record<AuthView, React.LazyExoticComponent<React.ComponentType<any>>> = {
@@ -26,7 +25,6 @@ const VIEW_COMPONENTS: Record<AuthView, React.LazyExoticComponent<React.Componen
     [AUTH_VIEWS.OTP_FORGOT]: OtpView,
     [AUTH_VIEWS.RESET_PASSWORD]: ResetPasswordView,
     [AUTH_VIEWS.CREATE_PASSWORD]: CreatePasswordView,
-    [AUTH_VIEWS.HOME]: HomeView,
 };
 
 // Loading fallback for Suspense
@@ -61,16 +59,6 @@ const AuthContent = () => {
     // Memoize the active view component to avoid unnecessary re-renders
     const ActiveView = useMemo(() => (VIEW_COMPONENTS[view] || LoginView) as React.LazyExoticComponent<React.ComponentType<any>>, [view]);
 
-    // Full-page Home view (bypass the auth card structure)
-    if (view === AUTH_VIEWS.HOME) {
-        return (
-            <div className="home-full-page-container">
-                <Suspense fallback={<ViewLoader />}>
-                    <ActiveView />
-                </Suspense>
-            </div>
-        );
-    }
 
     return (
         <div className="auth-page-wrapper">
