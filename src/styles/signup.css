@@ -9,6 +9,17 @@
     --luxury-shadow: 0 40px 120px rgba(0, 0, 0, 0.2);
 }
 
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    /* Disable the default blue highlight on mobile */
+}
+
+a:focus {
+    outline: none;
+    /* Disable default blue focus ring */
+}
+
 body,
 html,
 #root {
@@ -50,10 +61,11 @@ html,
     width: 65%;
     /* INCREASED FROM 45% FOR BETTER IMAGE PROMINENCE */
     height: 100%;
-    background-image: url('../../assets/auth/wedding.jpeg');
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1)), url('../../assets/auth/wedding.jpeg');
     background-size: cover;
-    background-position: left center;
-    /* ENSURE CONTENT ALIGNS TO PANEL LEFT */
+    background-position: left 85%;
+    filter: brightness(1);
+    /* Gradient overlay for better left-side depth */
     z-index: 0;
     display: block;
     margin: 0;
@@ -105,15 +117,13 @@ html,
     /* Subtle blended edge */
 }
 
-.preview-image-container {
-    width: 100%;
-    height: 100%;
-    /* FORCING 100% OF PARTITION HEIGHT */
-    display: flex;
-    /* ENSURING INTERNAL STRETCH */
-    overflow: hidden;
-    position: relative;
-    box-shadow: none;
+.preview-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+    pointer-events: none;
+    z-index: 1;
 }
 
 .preview-img-inside {
@@ -122,7 +132,9 @@ html,
     min-height: 100%;
     /* ENSURE ABSOLUTE VERTICAL FILL */
     object-fit: cover;
-    /* FULL COVERAGE WITHOUT GAPS */
+    object-position: center 85%;
+    filter: brightness(1);
+    /* Reset since we use the overlay after element */
     display: block;
 }
 
@@ -131,8 +143,8 @@ html,
     flex: 0 0 45%;
     /* ADJUSTED FOR LEFT OVERLAP */
     background-color: var(--bg-cream);
-    padding: 50px 60px 40px 40px;
-    /* INCREASED BUFFER FROM EDGES */
+    padding: 65px 60px 40px 40px;
+    /* Increased top padding to prevent clipping of header elements */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -150,47 +162,70 @@ html,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     padding-left: 15px;
-    /* SHIFTING LOGO RIGHT TO CLEAR ANGLE */
+    /* Compacted vertically */
 }
 
 .nav-logo-compact {
-    height: 30px;
+    height: 70px;
+    margin-top: -65px;
+    margin-left: 45px;
+    /* Increased margin to clear the left side rounding */
 }
 
-.nav-lang-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--primary-red);
-    cursor: pointer;
-    outline: none;
-}
-
-.nav-lang-pill:hover {
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
-    transform: translateY(-1px);
-}
-
-.nav-lang-flag {
-    width: 20px;
-    height: 14px;
-    border-radius: 3px;
-    overflow: hidden;
+.nav-lang-switcher {
     display: flex;
     align-items: center;
-    justify-content: center;
     background: #ffffff;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 30px;
+    padding: 3px;
+    gap: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: -75px;
+    margin-right: 8px;
+    /* Pushed higher and further right */
+    position: relative;
+    z-index: 100;
+}
+
+.switcher-icon {
+    margin-left: 8px;
+    margin-right: 4px;
+    color: var(--primary-red);
+    opacity: 0.8;
+}
+
+.lang-segment {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 11px;
+    font-weight: 800;
+    color: #777;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 40px;
+    text-align: center;
+}
+
+.lang-segment:focus {
+    outline: 2px solid #FFB300 !important;
+    /* Haldi Yellow focus ring instead of black */
+    outline-offset: 1px;
+}
+
+.lang-segment:hover {
+    color: var(--primary-red);
+    background: rgba(139, 0, 0, 0.05);
+}
+
+.lang-segment.active {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #a00000 100%);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(139, 0, 0, 0.3);
 }
 
 .nav-lang-text {
@@ -232,9 +267,13 @@ html,
 }
 
 .subtitle-entry-text {
-    color: #777;
+    color: #444;
+    /* Darker gray for higher contrast */
+    font-weight: 600;
+    /* Bolder weight */
     font-size: 14px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    /* Restoring spacing as requested earlier */
 }
 
 /* Form Groups & Inputs */
@@ -253,10 +292,30 @@ html,
     transition: all 0.3s;
 }
 
+.rounded-form-input:hover {
+    border-color: #cb1111;
+    background-color: #fdfdfd;
+}
+
 .rounded-form-input:focus {
     outline: none;
-    border-color: var(--primary-red);
-    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.05);
+    border-color: #c62828;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
+.rounded-form-input:disabled {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.rounded-form-input.input-error {
+    border-color: #c62828;
+    background-color: #fff8f8;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
 }
 
 /* Button Stacking */
@@ -286,6 +345,11 @@ html,
     box-shadow: 0 12px 25px rgba(139, 0, 0, 0.3);
 }
 
+.btn-primary-otp:focus {
+    outline: 2px solid #FFB300 !important;
+    outline-offset: 2px;
+}
+
 .btn-google-bordered {
     width: 100%;
     padding: 14px;
@@ -306,6 +370,11 @@ html,
     background: #F9F9F9;
 }
 
+.btn-google-bordered:focus {
+    outline: 2px solid #FFB300 !important;
+    outline-offset: 1px;
+}
+
 /* Footer Section Card */
 .auth-footer-link-text {
     margin-top: 30px;
@@ -319,6 +388,13 @@ html,
     text-decoration: none;
     font-weight: 600;
     margin-left: 5px;
+    transition: all 0.2s ease;
+}
+
+.auth-footer-link-text a:hover,
+.auth-footer-link-text a:active {
+    color: #C5A028;
+    /* Muted Haldi Gold */
 }
 
 @media (max-width: 900px) {

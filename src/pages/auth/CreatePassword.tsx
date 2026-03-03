@@ -18,7 +18,7 @@ const CreatePassword = () => {
     }, [validateAll, navigate]);
 
     return (
-        <div style={{ paddingTop: '80px' }}>
+        <div style={{ paddingTop: '0px' }}>
             <div className="title-row" style={{ justifyContent: 'center' }}>
                 <h1 className="welcome-title" style={{ textAlign: 'center' }}>Create new Password</h1>
             </div>

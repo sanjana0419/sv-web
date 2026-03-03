@@ -47,7 +47,7 @@ const OtpVerification = () => {
     }, [view, navigate, reset]);
 
     return (
-        <div style={{ paddingTop: '70px' }}>
+        <div style={{ paddingTop: '0px' }}>
             <div className="title-row" style={{ justifyContent: 'center' }}>
                 <h1 className="welcome-title" style={{ textAlign: 'center' }}>Verify OTP</h1>
             </div>

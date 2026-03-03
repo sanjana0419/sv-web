@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useRef, useEffect, useState, useMemo } from 'react';
+import { Globe } from 'lucide-react';
 import '../../styles/auth.css';
 import logoImg from '../../assets/auth/logo_v2.png';
 import kalashImg from '../../assets/auth/kalash.png';
@@ -40,6 +41,9 @@ const AuthContent = () => {
     const { view, prevView } = useAuth();
     const containerRef = useRef<HTMLDivElement>(null);
     const [animClass, setAnimClass] = useState('view-enter');
+    const [selectedLang, setSelectedLang] = useState('EN');
+
+    const languages = ['EN', 'HI', 'MR'];
 
     // Animated transitions on view change
     useEffect(() => {
@@ -84,15 +88,19 @@ const AuthContent = () => {
                     </div>
                     <div className="auth-header">
                         <img src={logoImg} alt="Logo" className="auth-logo-small" />
-                        <button type="button" className="auth-lang-pill">
-                            <span className="auth-lang-flag" aria-hidden="true">
-                                🇬🇧
-                            </span>
-                            <span className="auth-lang-text">EN</span>
-                            <span className="auth-lang-caret" aria-hidden="true">
-                                ▾
-                            </span>
-                        </button>
+                        <div className="auth-lang-switcher">
+                            <Globe size={14} className="switcher-icon" />
+                            {languages.map((lang) => (
+                                <button
+                                    key={lang}
+                                    type="button"
+                                    className={`lang-segment ${selectedLang === lang ? 'active' : ''}`}
+                                    onClick={() => setSelectedLang(lang)}
+                                >
+                                    {lang}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                     <div ref={containerRef} className={`auth-form-container ${animClass}`}>
                         <Suspense fallback={<ViewLoader />}>

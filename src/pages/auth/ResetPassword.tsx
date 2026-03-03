@@ -1,3 +1,4 @@
+
 import React, { useCallback } from 'react';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { AUTH_VIEWS } from '../../context/AuthContext';
@@ -18,7 +19,7 @@ const ResetPassword = () => {
     }, [validateAll, navigate]);
 
     return (
-        <div style={{ paddingTop: '80px' }}>
+        <div style={{ paddingTop: '0px' }}>
             <div className="title-row" style={{ justifyContent: 'center', marginBottom: '15px' }}>
                 <h1 className="welcome-title" style={{ textAlign: 'center', fontSize: '24px' }}>Reset Password</h1>
             </div>
@@ -38,9 +39,11 @@ const ResetPassword = () => {
                         onBlur={() => touchField('password')}
                         required
                     />
-                    <div className="show-pass-toggle" onClick={togglePass}>
-                        {showPass ? <EyeOff className="pass-toggle-icon" size={18} /> : <Eye className="pass-toggle-icon" size={18} />}
-                    </div>
+                    {formData.password && (
+                        <div className="show-pass-toggle" onClick={togglePass}>
+                            {showPass ? <EyeOff className="pass-toggle-icon" size={18} /> : <Eye className="pass-toggle-icon" size={18} />}
+                        </div>
+                    )}
                     {errors.password && <span className="field-error">{errors.password}</span>}
                 </div>
 
@@ -58,9 +61,11 @@ const ResetPassword = () => {
                         onBlur={() => touchField('confirmPassword')}
                         required
                     />
-                    <div className="show-pass-toggle" onClick={togglePass}>
-                        {showPass ? <EyeOff className="pass-toggle-icon" size={18} /> : <Eye className="pass-toggle-icon" size={18} />}
-                    </div>
+                    {formData.confirmPassword && (
+                        <div className="show-pass-toggle" onClick={togglePass}>
+                            {showPass ? <EyeOff className="pass-toggle-icon" size={18} /> : <Eye className="pass-toggle-icon" size={18} />}
+                        </div>
+                    )}
                     {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
                 </div>
 
@@ -71,7 +76,7 @@ const ResetPassword = () => {
                 <button type="submit" className="auth-btn-primary" style={{ marginTop: '10px' }}>Change Password</button>
 
                 <div style={{ textAlign: 'center', marginTop: '-10px' }}>
-                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer" style={{ color: '#A68E6B', fontSize: '12px' }}>
+                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer">
                         Back To Login
                     </a>
                 </div>

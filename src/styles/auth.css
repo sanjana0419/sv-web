@@ -14,6 +14,13 @@
 
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    /* Disable the default blue highlight on mobile */
+}
+
+a:focus {
+    outline: none;
+    /* Disable default blue focus ring */
 }
 
 body,
@@ -54,8 +61,11 @@ html,
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 85%;
+    /* Shifted even higher */
     opacity: 0.6;
-    filter: blur(4px) brightness(1.2);
+    filter: blur(4px) brightness(1);
+    /* Reduced brightness from 1.2 */
     animation: kenBurns 10s ease-in-out infinite alternate;
 }
 
@@ -198,10 +208,11 @@ html,
     width: 100%;
     /* Covers the whole background to avoid gaps */
     height: 100%;
-    background-image: url('../assets/auth/wedding.jpeg');
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1)), url('../assets/auth/wedding.jpeg');
     background-size: cover;
-    background-position: 5% 20%;
-    /* Shifted further left to frame faces better */
+    background-position: 5% 65%;
+    filter: brightness(1);
+    /* Gradient overlay for better left-side depth */
     z-index: 0;
 }
 
@@ -257,27 +268,35 @@ html,
     /* Angled split inside the card */
     height: 100%;
     background-color: #FFFFE4;
-    padding: 40px 60px;
+    padding: 85px 60px 40px;
+    /* Increased top padding to provide safe harbor for header elements */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Top alignment for consistent layout */
     z-index: 11;
     /* Base diagonal; the curved corner near the logo is created with ::before */
     clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
 }
 
-.auth-right::before {
+border-radius: 50%;
+/* Rounded cap for top of middle line */
+z-index: 12;
+}
+
+.auth-card::after {
     content: '';
     position: absolute;
-    top: -40px;
-    left: -70px;
-    width: 180px;
-    height: 180px;
+    bottom: -30px;
+    left: 45%;
+    /* Aligned with bottom of slant */
+    width: 80px;
+    height: 80px;
     background-color: #FFFFE4;
     border-radius: 50%;
-    /* This circular cap makes the divider line look like a smooth circular curve at the card's left corner near the logo */
-    z-index: -1;
+    /* Rounded cap for bottom of middle line */
+    z-index: 12;
 }
 
 /* ── Background Decoration: Kalash (center) + Haldi (bottom-left) + Kumkum (bottom-right) ── */
@@ -376,45 +395,64 @@ html,
 
 .auth-logo-small {
     height: 100px;
-    margin-top: -30px;
-    margin-left: 24px;
-    /* Slightly lower and to the right so it sits cleanly inside the new circular corner */
+    margin-top: -85px;
+    /* Fits exactly in the 85px padding area */
+    margin-left: 55px;
+    /* Increased to 55px to clear the left side clipping */
 }
 
-.auth-lang-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--primary-maroon);
-    cursor: pointer;
-    outline: none;
-    margin-top: -30px;
-    margin-right: 12px;
-}
-
-.auth-lang-pill:hover {
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
-    transform: translateY(-1px);
-}
-
-.auth-lang-flag {
-    width: 20px;
-    height: 14px;
-    border-radius: 3px;
-    overflow: hidden;
+.auth-lang-switcher {
     display: flex;
     align-items: center;
-    justify-content: center;
     background: #ffffff;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 30px;
+    padding: 3px;
+    gap: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: -95px;
+    margin-right: 12px;
+    /* Pushed further right and upwards */
+    position: relative;
+    z-index: 100;
+}
+
+.switcher-icon {
+    margin-left: 8px;
+    margin-right: 4px;
+    color: var(--primary-maroon);
+    opacity: 0.8;
+}
+
+.lang-segment {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 40px;
+    text-align: center;
+}
+
+.lang-segment:focus {
+    outline: 2px solid #FFB300 !important;
+    /* Haldi Yellow focus ring instead of black */
+    outline-offset: 1px;
+}
+
+.lang-segment:hover {
+    color: var(--primary-maroon);
+    background: rgba(203, 17, 17, 0.05);
+}
+
+.lang-segment.active {
+    background: linear-gradient(135deg, var(--primary-maroon) 0%, #a00000 100%);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(160, 0, 0, 0.3);
 }
 
 .auth-lang-text {
@@ -431,11 +469,10 @@ html,
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* Changed from center to prevent mutual cropping */
     position: relative;
     z-index: 2;
-    padding-top: 55px;
-    /* Moderated padding to keep elements from going too far down */
+    padding-top: 15px;
+    /* Reduced significantly as container padding handles most of the top gap */
 }
 
 .welcome-title {
@@ -462,11 +499,13 @@ html,
 .auth-subtitle {
     font-family: 'Marcellus', serif;
     font-size: 16px;
-    color: var(--accent-gold);
-    margin-bottom: 20px;
+    color: #8B6508;
+    /* Darker Gold for better contrast */
+    font-weight: 700;
+    /* Bolder weight */
+    margin-bottom: 30px;
     margin-top: 5px;
-    letter-spacing: 1px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     opacity: 0;
     animation: fadeInUpStaggered 0.8s ease-out 0.2s forwards;
 }
@@ -475,7 +514,8 @@ html,
 
 /* Pixel-perfect form elements */
 .form-group {
-    margin: 0 auto 12px;
+    margin: 0 auto 20px;
+    /* Reduced from 24px to look less 'floating' */
     width: 380px;
     position: relative;
     opacity: 0;
@@ -496,20 +536,35 @@ html,
     border-radius: 50px;
     border: 1px solid #E6D5B8;
     background-color: #fff;
-    font-size: 14px;
+    font-size: 13px;
+    /* Slightly smaller for a tighter feel */
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--primary-maroon);
 }
 
-.auth-input::placeholder {
-    color: var(--primary-maroon);
-    opacity: 0.6;
+.auth-input:hover {
+    border-color: #cb1111;
+    background-color: #fffaf5;
 }
 
 .auth-input:focus {
-    border-color: var(--primary-maroon);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    border-color: #c62828;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
+.auth-input:disabled {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.auth-input::placeholder {
+    color: var(--primary-maroon);
+    opacity: 0.6;
 }
 
 .input-icon-wrapper {
@@ -564,6 +619,20 @@ html,
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.2s;
+    animation: eyeFadeIn 0.3s ease-out;
+    /* Smooth entrance */
+}
+
+@keyframes eyeFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(5px);
+    }
+
+    to {
+        opacity: 0.7;
+        transform: translateY(-50%) translateX(0);
+    }
 }
 
 .show-pass-toggle:hover {
@@ -581,6 +650,13 @@ html,
     font-weight: 700;
     text-decoration: none;
     text-transform: capitalize;
+    transition: color 0.2s ease;
+}
+
+.forgot-link:hover,
+.forgot-link:active {
+    color: #FFB300;
+    /* Haldi Yellow */
 }
 
 /* Or Divider */
@@ -640,6 +716,11 @@ html,
     transform: scale(0.98);
 }
 
+.google-btn-pill:focus {
+    outline: 2px solid #FFB300 !important;
+    outline-offset: 1px;
+}
+
 /* Decorative Flourish */
 .auth-divider-flourish {
     text-align: center;
@@ -682,18 +763,23 @@ html,
     transform: translateY(-1px) scale(0.98);
 }
 
-.auth-footer {
-    text-align: center;
-    font-size: 14px;
-    color: var(--primary-maroon);
-    font-weight: 500;
-    margin-top: 5px;
-    opacity: 0.85;
-    text-shadow: 0 0 6px rgba(203, 17, 17, 0.6);
-    /* Pronounced soft blur effect */
+.auth-btn-primary:focus {
+    outline: 2px solid #FFB300 !important;
+    outline-offset: 2px;
 }
 
-.auth-footer a {
+.auth-footer {
+    text-align: center;
+    font-size: 13px;
+    color: var(--primary-maroon);
+    font-weight: 600;
+    margin-top: 8px;
+    opacity: 0.9;
+    /* Removed text-shadow to eliminate the blur/glow effect */
+}
+
+.auth-footer a,
+a.auth-footer {
     color: var(--primary-maroon);
     text-decoration: none;
     font-weight: 800;
@@ -703,10 +789,14 @@ html,
     display: inline-block;
 }
 
-.auth-footer a:hover {
-    transform: scale(1.1);
+.auth-footer a:hover,
+.auth-footer a:active,
+a.auth-footer:hover,
+a.auth-footer:active {
+    transform: scale(1.02);
     text-decoration: underline;
-    filter: brightness(1.2);
+    color: #C5A028 !important;
+    /* Muted Haldi Gold - more elegant and grounded */
 }
 
 /* (kalash card styles defined above near line 271) */
@@ -829,16 +919,19 @@ html,
 
 /* Form Validation Styles */
 .input-error {
-    border-color: #e74c3c !important;
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
+    border-color: #c62828 !important;
+    background-color: #fff8f8 !important;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1) !important;
 }
 
 .field-error {
     display: block;
     color: #e74c3c;
-    font-size: 10px;
+    font-size: 9px;
+    /* Smaller font as requested */
     position: absolute;
     top: calc(100% + 2px);
+    /* Closer to the input */
     left: 20px;
     font-weight: 600;
     line-height: 1.2;

@@ -44,9 +44,11 @@ const LoginPage = () => {
                         onBlur={() => touchField('password')}
                         required
                     />
-                    <div className="show-pass-toggle" onClick={togglePass}>
-                        {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </div>
+                    {formData.password && (
+                        <div className="show-pass-toggle" onClick={togglePass}>
+                            {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </div>
+                    )}
                     {errors.password && <span className="field-error">{errors.password || ''}</span>}
                 </div>
                 <div className="forgot-link-container">
@@ -68,7 +70,9 @@ const LoginPage = () => {
                     <img src={dividerImg} alt="" />
                 </div>
 
-                <button type="submit" className="auth-btn-primary">Log In</button>
+                <button type="submit" className="auth-btn-primary">
+                    Log In
+                </button>
             </form>
             <p className="auth-footer">
                 Don't have an account ? <a href="#" onClick={(e) => { e.preventDefault(); navigate(AUTH_VIEWS.SIGNUP); }}>sign up</a>

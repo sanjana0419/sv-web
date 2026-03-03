@@ -61,7 +61,9 @@ const RegisterPage = () => {
                     <img src={dividerImg} alt="" />
                 </div>
 
-                <button type="submit" className="auth-btn-primary">Send OTP</button>
+                <button type="submit" className="auth-btn-primary">
+                    Send OTP
+                </button>
             </form>
             <p className="auth-footer">
                 Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }}>Log In</a>

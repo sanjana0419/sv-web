@@ -18,11 +18,11 @@ const ForgotPassword = () => {
     }, [validateAll, navigate]);
 
     return (
-        <div style={{ paddingTop: '80px' }}>
+        <div style={{ paddingTop: '0px' }}>
             <div className="title-row" style={{ justifyContent: 'center', marginBottom: '10px' }}>
                 <h1 className="welcome-title" style={{ fontSize: '24px', textAlign: 'center' }}>Forgot Password</h1>
             </div>
-            <p className="auth-subtitle" style={{ textAlign: 'center', fontSize: '13px', marginBottom: '20px' }}>
+            <p className="auth-subtitle" style={{ textAlign: 'center', fontSize: '13px', marginBottom: '20px', color: '#D4AF37', fontWeight: '500' }}>
                 Enter your registered Email or mobile number
             </p>
             <form onSubmit={handleSubmit}>
