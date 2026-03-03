@@ -99,6 +99,7 @@ html,
     /* Ensuring equal height for children */
 }
 
+
 /* Internal Card Partition - Left (Image area, 50%) */
 .card-left-partition {
     flex: 0 0 55%;
@@ -156,6 +157,7 @@ html,
     margin-left: -5%;
     /* Pulling closer to eliminate gap from angle */
 }
+
 
 /* Top Nav Area Inside Card */
 .card-internal-nav {

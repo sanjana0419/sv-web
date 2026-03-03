@@ -247,6 +247,7 @@ html,
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
+
 /* Left Section: Transparent Window */
 .auth-left {
     position: absolute;
@@ -280,23 +281,19 @@ html,
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
 }
 
-border-radius: 50%;
-/* Rounded cap for top of middle line */
-z-index: 12;
-}
 
-.auth-card::after {
+
+.auth-right::before {
     content: '';
     position: absolute;
-    bottom: -30px;
-    left: 45%;
-    /* Aligned with bottom of slant */
-    width: 80px;
-    height: 80px;
+    top: -40px;
+    left: -70px;
+    width: 180px;
+    height: 180px;
     background-color: #FFFFE4;
     border-radius: 50%;
-    /* Rounded cap for bottom of middle line */
-    z-index: 12;
+    /* This circular cap makes the divider line look like a smooth circular curve at the card's left corner near the logo */
+    z-index: -1;
 }
 
 /* ── Background Decoration: Kalash (center) + Haldi (bottom-left) + Kumkum (bottom-right) ── */
