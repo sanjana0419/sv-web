@@ -723,6 +723,8 @@ html,
     text-align: center;
     margin-top: -64px;
     margin-bottom: 0px;
+    margin-left: 130px;
+    /* Shifted further rightwards as requested */
     opacity: 1;
     pointer-events: none;
     /* Critical: Prevent blocking button clicks */
@@ -783,7 +785,19 @@ a.auth-footer {
     font-size: 15px;
     text-transform: capitalize;
     transition: all 0.3s ease;
-    display: inline-block;
+    display: inline-flex;
+    /* Changed to inline-flex for better alignment */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.back-arrow {
+    transition: transform 0.3s ease;
+}
+
+.auth-footer a:hover .back-arrow {
+    transform: translateX(-4px);
 }
 
 .auth-footer a:hover,

@@ -41,8 +41,8 @@ const ForgotPassword = () => {
                 </div>
                 <button type="submit" className="auth-btn-primary" style={{ marginTop: '30px' }}>Send OTP</button>
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer">
-                        <ArrowLeft size={14} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> Back to Login
+                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer back-to-login">
+                        <ArrowLeft size={16} className="back-arrow" /> <span>Back to Login</span>
                     </a>
                 </div>
                 <div className="auth-divider-flourish" style={{ marginTop: '-60px', marginBottom: '0' }}>

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Eye, EyeOff } from 'lucide-react';
+import { Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { AUTH_VIEWS } from '../../context/AuthContext';
 import { useAuth } from '../../hooks/useAuth';
 import { useFormValidation } from '../../hooks/useFormValidation';
@@ -77,8 +77,8 @@ const ResetPassword = () => {
                 <button type="submit" className="auth-btn-primary" style={{ marginTop: '10px' }}>Change Password</button>
 
                 <div style={{ textAlign: 'center', marginTop: '-10px' }}>
-                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer">
-                        Back To Login
+                    <a href="#" onClick={(e: React.MouseEvent) => { e.preventDefault(); navigate(AUTH_VIEWS.LOGIN); }} className="auth-footer back-to-login">
+                        <ArrowLeft size={16} className="back-arrow" /> <span>Back To Login</span>
                     </a>
                 </div>
 
