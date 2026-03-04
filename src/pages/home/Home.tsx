@@ -4,9 +4,16 @@ import Hero from './components/Hero';
 import ProfileCompletion from './components/ProfileCompletion';
 import RecommendedProfiles from './components/RecommendedProfiles';
 import Sidebar from './components/Sidebar';
+import RightSidebar from './components/RightSidebar';
 import Gallery from './components/Gallery';
 
 const Home: React.FC = () => {
+    const exploreRef = React.useRef<HTMLDivElement>(null);
+
+    const handleExplore = () => {
+        exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     useEffect(() => {
         document.documentElement.style.scrollBehavior = 'smooth';
         return () => {
@@ -15,36 +22,39 @@ const Home: React.FC = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#FDFBF2] font-sans selection:bg-rose-100 selection:text-rose-600">
-            {/* Navigation */}
-            <Navbar />
+        <div className="min-h-screen bg-[#FDFBF2] font-sans selection:bg-rose-100 selection:text-rose-600 overflow-x-hidden">
+            {/* Sidebar - Floating Glassmorphism */}
+            <Sidebar />
 
-            {/* Hero Section */}
-            <Hero />
+            {/* Hero Section - Full Screen with Explore Interaction */}
+            <Hero onExplore={handleExplore} />
 
-            {/* Main Content Area */}
-            <div className="max-w-[1400px] mx-auto px-6 pb-20">
-                {/* Profile Completion - Overlapping Hero slightly */}
-                <ProfileCompletion />
+            {/* Main Content Area - Revealed on Scroll */}
+            <div ref={exploreRef} className="max-w-[1700px] mx-auto px-6 md:px-12 lg:pl-48 lg:pr-12 pb-20 relative z-20 mt-12 scroll-mt-20">
+                <div className="flex flex-col lg:flex-row gap-10 items-start">
+                    {/* Left Column */}
+                    <main className="flex-1 w-full lg:w-[65%] space-y-12">
+                        {/* Profile Completion */}
+                        <ProfileCompletion />
 
-                <div className="flex flex-col lg:flex-row gap-12 items-start">
-                    {/* Main Feed */}
-                    <main className="flex-1 overflow-hidden">
+                        {/* Main Feed */}
                         <RecommendedProfiles />
                     </main>
 
-                    {/* Sidebar */}
-                    <Sidebar />
+                    {/* Right Column - Success Stories & Activity */}
+                    <div className="hidden lg:block w-[400px]">
+                        <RightSidebar />
+                    </div>
                 </div>
 
                 {/* Full Width Gallery/Services Section */}
-                <div className="mt-20">
+                <div className="mt-24">
                     <Gallery />
                 </div>
             </div>
 
             {/* Footer */}
-            <footer className="bg-white py-12 border-t border-gray-100">
+            <footer className="bg-white py-12 border-t border-gray-100 mt-20">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                         <p className="text-gray-400 text-sm">© 2026 Shubh Vivah. All rights reserved.</p>
