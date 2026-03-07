@@ -15,6 +15,7 @@ import JewelleryPage from '../pages/services/JewelleryPage';
 import MehendiPage from '../pages/services/MehendiPage';
 import InvitationPage from '../pages/services/InvitationPage';
 import MatchesPage from '../pages/matches/MatchesPage';
+import MatchProfilePage from '../pages/matches/MatchProfilePage';
 
 const AppRoutes: React.FC = () => {
     return (
@@ -32,6 +33,7 @@ const AppRoutes: React.FC = () => {
                     <Route path="/services/mehendi" element={<MehendiPage />} />
                     <Route path="/services/invitation" element={<InvitationPage />} />
                     <Route path="/matches" element={<MatchesPage />} />
+                    <Route path="/matches/:id" element={<MatchProfilePage />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </BrowserRouter>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import siddharthImg from '../../assets/matches/siddharth.png';
 
 // --- Types ---
 interface MatchProfile {
@@ -92,7 +94,7 @@ const mockMatches: MatchProfile[] = [
     {
         id: '7',
         name: 'Siddharth Verma',
-        image: 'https://images.unsplash.com/photo-1550259114-ad7187f0b240?w=500&h=500&fit=crop',
+        image: siddharthImg,
         matchPercentage: 85,
         age: 29,
         height: '5\'10"',
@@ -117,6 +119,7 @@ const mockMatches: MatchProfile[] = [
 
 // --- Main Component ---
 const MatchesPage: React.FC = () => {
+    const navigate = useNavigate();
     // Basic state for the form, functional in terms of holding values
     // not implementing real filtering logic to keep it purely UI driven as requested
     const [ageRange, setAgeRange] = useState('21 - 25');
@@ -273,7 +276,10 @@ const MatchesPage: React.FC = () => {
                                             </button>
                                         </div>
                                         {/* View Full Profile */}
-                                        <button className="w-full border-2 border-[#8B0000] text-[#8B0000] hover:bg-rose-50 font-semibold py-2.5 rounded-full transition-colors bg-white">
+                                        <button 
+                                            onClick={() => navigate(`/matches/${profile.id}`)}
+                                            className="w-full border-2 border-[#8B0000] text-[#8B0000] hover:bg-rose-50 font-semibold py-2.5 rounded-full transition-colors bg-white"
+                                        >
                                             View Full Profile
                                         </button>
                                     </div>
