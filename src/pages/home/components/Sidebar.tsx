@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Heart, Search, MessageSquare, Layers } from 'lucide-react';
 
 const Sidebar: React.FC = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="fixed left-8 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
             <motion.div
@@ -17,7 +20,10 @@ const Sidebar: React.FC = () => {
                 </button>
 
                 {/* Heart/Matches */}
-                <button className="w-13 h-13 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#801B1B] hover:text-white hover:scale-110 active:scale-95 transition-all group relative border border-white/10 shadow-xl">
+                <button 
+                    onClick={() => navigate('/matches')}
+                    className="w-13 h-13 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#801B1B] hover:text-white hover:scale-110 active:scale-95 transition-all group relative border border-white/10 shadow-xl"
+                >
                     <Heart size={26} strokeWidth={2.5} />
                     <span className="absolute left-24 px-5 py-2.5 bg-black/90 backdrop-blur-xl text-white text-[11px] font-black rounded-2xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap border border-white/10 pointer-events-none shadow-2xl tracking-widest uppercase">Matches</span>
                 </button>
@@ -39,8 +45,11 @@ const Sidebar: React.FC = () => {
                     <span className="absolute left-24 px-5 py-2.5 bg-black/90 backdrop-blur-xl text-white text-[11px] font-black rounded-2xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap border border-white/10 pointer-events-none shadow-2xl tracking-widest uppercase">Messages</span>
                 </button>
 
-                {/* Gallery/Plans */}
-                <button className="w-13 h-13 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-indigo-600 hover:text-white hover:scale-110 active:scale-95 transition-all group relative border border-white/10 shadow-xl">
+                {/* Gallery/Services */}
+                <button 
+                    onClick={() => navigate('/services')}
+                    className="w-13 h-13 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-indigo-600 hover:text-white hover:scale-110 active:scale-95 transition-all group relative border border-white/10 shadow-xl"
+                >
                     <Layers size={26} strokeWidth={2.5} />
                     <span className="absolute left-24 px-5 py-2.5 bg-black/90 backdrop-blur-xl text-white text-[11px] font-black rounded-2xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap border border-white/10 pointer-events-none shadow-2xl tracking-widest uppercase">Services</span>
                 </button>
