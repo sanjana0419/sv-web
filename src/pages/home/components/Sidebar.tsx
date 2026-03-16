@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Heart, Search, MessageSquare, Layers } from 'lucide-react';
 
