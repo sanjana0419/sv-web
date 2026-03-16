@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../hooks/useAuth';
 
 import venueImg from '../../../assets/auth/wedding-venue.jpeg';
-import mehndiImg from '../../../assets/auth/wedding-mehndi.jpeg';
+import mehndiImg from '../../../assets/auth/wedding-mehndi.png';
 import jewelleryImg from '../../../assets/auth/wedding-jewellery.jpeg';
 import foodImg from '../../../assets/auth/wedding-food.jpeg';
 import decorImg from '../../../assets/auth/wedding-decor.jpeg';
@@ -80,7 +80,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
             </div>
 
             {/* Main Centered Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center z-10 transition-all">
+            <div className="absolute inset-0 flex flex-col items-center justify-center z-10 transition-all pb-24">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -125,14 +125,34 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
 
             {/* Top Right Navigation Pill - Higher Transparency & Increased Size */}
             <div className="absolute top-10 right-10 z-30">
-                <div className="flex items-center gap-4 bg-white/10 backdrop-blur-2xl px-6 py-3 rounded-full border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:bg-white/15 transition-all group/pill">
-                    <div className="relative p-2.5 text-white/90 hover:text-white transition-colors cursor-pointer hover:scale-110 active:scale-95">
-                        <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-rose-600 rounded-full text-[11px] font-black flex items-center justify-center border-2 border-black/50 leading-none shadow-lg">5</div>
+                <motion.div
+                    whileHover="hover"
+                    initial="initial"
+                    className="flex items-center bg-white/10 backdrop-blur-2xl px-6 py-3 rounded-full border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:bg-white/15 transition-all cursor-pointer group/pill overflow-hidden"
+                >
+                    {/* Sliding Notification Content area */}
+                    <motion.div
+                        variants={{
+                            initial: { x: -20, opacity: 0, width: 0 },
+                            hover: { x: 0, opacity: 1, width: 'auto' }
+                        }}
+                        className="flex items-center pr-4 border-r border-white/20 mr-4 whitespace-nowrap overflow-hidden"
+                    >
+                        <span className="text-white/80 text-[11px] font-black tracking-widest uppercase">New Matches found</span>
+                    </motion.div>
+
+                    {/* Notification Icon & Badge */}
+                    <div className="relative p-2.5 text-white/90 hover:text-white transition-colors hover:scale-110 active:scale-95 z-40">
+                        {/* Fixed Badge Layering: Increased Z-index */}
+                        <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-rose-600 rounded-full text-[11px] font-black flex items-center justify-center border-2 border-black/50 leading-none shadow-lg z-50">5</div>
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v1m6 0H9" />
                         </svg>
                     </div>
+
                     <div className="w-px h-8 bg-white/20 mx-1" />
+
+                    {/* Profile Section */}
                     <div className="flex items-center gap-4 pl-1 group cursor-pointer hover:scale-105 transition-transform">
                         <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#801B1B] p-0.5 shadow-xl">
                             <div className="w-full h-full rounded-full bg-black flex items-center justify-center relative">
@@ -141,7 +161,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

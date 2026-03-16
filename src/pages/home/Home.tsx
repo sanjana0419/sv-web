@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProfileCompletion from './components/ProfileCompletion';
@@ -6,12 +7,21 @@ import RecommendedProfiles from './components/RecommendedProfiles';
 import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
 import Gallery from './components/Gallery';
+import Messages from './components/Messages';
 
 const Home: React.FC = () => {
+    const [view, setView] = React.useState<'dashboard' | 'messages' | 'matches' | 'search' | 'services'>('dashboard');
     const exploreRef = React.useRef<HTMLDivElement>(null);
 
     const handleExplore = () => {
-        exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (view !== 'dashboard') {
+            setView('dashboard');
+            setTimeout(() => {
+                exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        } else {
+            exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     useEffect(() => {
@@ -24,34 +34,76 @@ const Home: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#FDFBF2] font-sans selection:bg-rose-100 selection:text-rose-600 overflow-x-hidden">
             {/* Sidebar - Floating Glassmorphism */}
-            <Sidebar />
+            <Sidebar currentView={view} onViewChange={setView} />
 
-            {/* Hero Section - Full Screen with Explore Interaction */}
-            <Hero onExplore={handleExplore} />
+            {/* Conditionally Render Views */}
+            <AnimatePresence mode="wait">
+                {view === 'dashboard' ? (
+                    <motion.div
+                        key="dashboard"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full"
+                    >
+                        {/* Hero Section - Full Screen with Explore Interaction */}
+                        <Hero onExplore={handleExplore} />
 
-            {/* Main Content Area - Revealed on Scroll */}
-            <div ref={exploreRef} className="max-w-[1700px] mx-auto px-6 md:px-12 lg:pl-48 lg:pr-12 pb-20 relative z-20 mt-12 scroll-mt-20">
-                <div className="flex flex-col lg:flex-row gap-10 items-start">
-                    {/* Left Column */}
-                    <main className="flex-1 w-full lg:w-[65%] space-y-12">
-                        {/* Profile Completion */}
-                        <ProfileCompletion />
+                        {/* Main Content Area - Revealed on Scroll */}
+                        <div ref={exploreRef} className="max-w-[1700px] mx-auto px-6 md:px-12 lg:pl-48 lg:pr-12 pb-20 relative z-20 mt-12 scroll-mt-20">
+                            <div className="flex flex-col lg:flex-row gap-10 items-start">
+                                {/* Left Column */}
+                                <main className="flex-1 w-full lg:w-[65%] space-y-12">
+                                    {/* Profile Completion */}
+                                    <ProfileCompletion />
 
-                        {/* Main Feed */}
-                        <RecommendedProfiles />
-                    </main>
+                                    {/* Main Feed */}
+                                    <RecommendedProfiles />
+                                </main>
 
-                    {/* Right Column - Success Stories & Activity */}
-                    <div className="hidden lg:block w-[400px]">
-                        <RightSidebar />
-                    </div>
-                </div>
+                                {/* Right Column - Success Stories & Activity */}
+                                <div className="hidden lg:block w-[400px]">
+                                    <RightSidebar />
+                                </div>
+                            </div>
+                        </div>
 
-                {/* Full Width Gallery/Services Section */}
-                <div className="mt-24">
-                    <Gallery />
-                </div>
-            </div>
+                        {/* Full Width Gallery/Services Section */}
+                        <div className="w-full">
+                            <Gallery />
+                        </div>
+                    </motion.div>
+                ) : view === 'messages' ? (
+                    <motion.div
+                        key="messages"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        className="max-w-[1700px] mx-auto lg:pl-48 lg:pr-12 min-h-screen"
+                    >
+                        <Messages />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="other"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex items-center justify-center min-h-screen lg:pl-48"
+                    >
+                        <div className="text-center">
+                            <h2 className="text-3xl font-black text-gray-900 mb-4 capitalize">{view} Section</h2>
+                            <p className="text-gray-500">This section is coming soon.</p>
+                            <button
+                                onClick={() => setView('dashboard')}
+                                className="mt-8 px-8 py-3 bg-[#c6862e] text-white rounded-full font-black shadow-lg"
+                            >
+                                Back to Dashboard
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
 
             {/* Footer */}
             <footer className="bg-white py-12 border-t border-gray-100 mt-20">

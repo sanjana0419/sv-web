@@ -20,6 +20,7 @@ interface AuthState {
     prevView: AuthView | null;
     formData: {
         contact: string;
+        name: string; // Added name field
         password?: string;
         confirmPassword?: string;
     };
@@ -38,6 +39,7 @@ export interface AuthContextType extends AuthState {
     navigate: (targetView: AuthView) => void;
     setField: (field: string, value: string) => void;
     togglePass: () => void;
+    setSubmitting: (isSubmitting: boolean) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -47,6 +49,7 @@ const initialState: AuthState = {
     prevView: null,
     formData: {
         contact: '',
+        name: '', // Initial name
         password: '',
         confirmPassword: ''
     },
@@ -98,14 +101,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'TOGGLE_PASS' });
     }, []);
 
+    const setSubmitting = useCallback((payload: boolean) => {
+        dispatch({ type: 'SET_SUBMITTING', payload });
+    }, []);
+
     // Optimized context value
     const value = useMemo(() => ({
         ...state,
         isTransitioning: isPending,
         navigate,
         setField,
-        togglePass
-    }), [state, isPending, navigate, setField, togglePass]);
+        togglePass,
+        setSubmitting
+    }), [state, isPending, navigate, setField, togglePass, setSubmitting]);
 
     return (
         <AuthContext.Provider value={value}>

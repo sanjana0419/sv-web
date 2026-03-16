@@ -31,17 +31,20 @@ const ProfileCompletion: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right: 100% Badge with Soft Glow */}
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center relative shadow-[0_12px_40px_rgba(255,87,34,0.15)] border border-orange-50 shrink-0">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-50/50 to-white -z-10" />
-                    <span className="text-lg font-bold text-[#FF5722]">100%</span>
-                </div>
+                {/* Right: 100% Badge with Soft Glow - Matching Kumkum Color */}
+                <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-20 h-20 rounded-full flex items-center justify-center relative shadow-[0_15px_35px_rgba(255,165,0,0.2)] border border-orange-100/50 shrink-0 cursor-help"
+                >
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#FFDAB9] via-white to-white -z-10" />
+                    <span className="text-xl font-black text-[#801B1B] tracking-tight">100%</span>
+                </motion.div>
             </div>
 
             {/* Progress Section - Centered and Shorter */}
             <div className="w-full px-24 relative mt-10 mb-2">
                 {/* Character Animation */}
-                <div className="absolute inset-x-24 -top-16 select-none pointer-events-none h-20">
+                <div className="absolute inset-x-24 -top-19 select-none pointer-events-none h-20">
                     {/* The Bride - Stationary at 100% */}
                     <div className="absolute right-0 bottom-0 w-20 h-20">
                         <img src={brideImg} alt="Bride" className="w-full h-full object-contain" />

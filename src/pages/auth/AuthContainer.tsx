@@ -8,9 +8,9 @@ import { AuthProvider, AUTH_VIEWS, AuthView } from '../../context/AuthContext';
 import { useAuth } from '../../hooks/useAuth';
 
 // React.lazy — code-split each view for on-demand loading
+const ForgotPasswordView = lazy(() => import('./forgot-password'));
 const LoginView = lazy(() => import('./login'));
 const SignupView = lazy(() => import('./register'));
-const ForgotPasswordView = lazy(() => import('./forgot-password'));
 const OtpView = lazy(() => import('./otp'));
 const ResetPasswordView = lazy(() => import('./ResetPassword'));
 const CreatePasswordView = lazy(() => import('./CreatePassword'));
@@ -19,7 +19,7 @@ const HomeView = lazy(() => import('../home/Home')); // ✅ Your homepage
 // View component map — avoids switch statements
 const VIEW_COMPONENTS: Record<
     AuthView,
-    React.LazyExoticComponent<React.ComponentType<any>>
+    React.ElementType
 > = {
     [AUTH_VIEWS.LOGIN]: LoginView,
     [AUTH_VIEWS.SIGNUP]: SignupView,
@@ -63,7 +63,7 @@ const AuthContent = () => {
 
     // Memoize the active view component to avoid unnecessary re-renders
     const ActiveView = useMemo(
-        () => (VIEW_COMPONENTS[view] || LoginView) as React.LazyExoticComponent<React.ComponentType<any>>,
+        () => (VIEW_COMPONENTS[view] || LoginView) as React.ElementType,
         [view]
     );
 
@@ -120,11 +120,9 @@ const AuthContent = () => {
     );
 };
 
-// Root component wraps with AuthProvider
+// Root component now uses the global AuthProvider from routes
 const AuthContainer = () => (
-    <AuthProvider>
-        <AuthContent />
-    </AuthProvider>
+    <AuthContent />
 );
 
 export default AuthContainer;

@@ -12,7 +12,7 @@ const OTP_BACK_MAP: Partial<Record<AuthView, AuthView>> = {
 };
 
 const OtpVerification = () => {
-    const { view, navigate, formData } = useAuth();
+    const { view, navigate, formData, isSubmitting, setSubmitting } = useAuth();
     const routerNavigate = useNavigate();
     const { otpRefs, otp, handleChange, handleKeyDown, handlePaste, isComplete, reset } = useOtpInput(6);
 
@@ -21,39 +21,45 @@ const OtpVerification = () => {
         otpRefs.current[0]?.focus();
     }, []);
 
-    const handleVerify = useCallback(() => {
-        if (!isComplete) return;
+    const handleVerify = useCallback(async () => {
+        if (!isComplete || isSubmitting) return;
 
-        // Determine target view based on flow source
-        switch (view) {
-            case AUTH_VIEWS.OTP_FORGOT:
-                navigate(AUTH_VIEWS.RESET_PASSWORD);
-                break;
-            case AUTH_VIEWS.OTP_SIGNUP:
-                navigate(AUTH_VIEWS.CREATE_PASSWORD);
-                break;
-            case AUTH_VIEWS.OTP_LOGIN:
-                // Success entry for existing user login
-                routerNavigate('/home');
-                break;
-            default:
-                // If view state is lost or ambiguous, default to create password for safety in signup context
-                navigate(AUTH_VIEWS.CREATE_PASSWORD);
-        }
-    }, [isComplete, view, navigate, routerNavigate]);
+        setSubmitting(true);
+        // Simulate verification delay
+        setTimeout(() => {
+            setSubmitting(false);
+            // Determine target view based on flow source
+            switch (view) {
+                case AUTH_VIEWS.OTP_FORGOT:
+                    navigate(AUTH_VIEWS.RESET_PASSWORD);
+                    break;
+                case AUTH_VIEWS.OTP_SIGNUP:
+                    navigate(AUTH_VIEWS.CREATE_PASSWORD);
+                    break;
+                case AUTH_VIEWS.OTP_LOGIN:
+                    // Success entry for existing user login
+                    routerNavigate('/home');
+                    break;
+                default:
+                    // If view state is lost or ambiguous, default to create password for safety in signup context
+                    navigate(AUTH_VIEWS.CREATE_PASSWORD);
+            }
+        }, 800);
+    }, [isComplete, isSubmitting, view, navigate, routerNavigate, setSubmitting]);
 
     const handleBack = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
+        if (isSubmitting) return;
         reset();
         navigate(OTP_BACK_MAP[view] || AUTH_VIEWS.LOGIN);
-    }, [view, navigate, reset]);
+    }, [view, navigate, reset, isSubmitting]);
 
     return (
-        <div style={{ paddingTop: '0px' }}>
-            <div className="title-row" style={{ justifyContent: 'center' }}>
-                <h1 className="welcome-title" style={{ textAlign: 'center' }}>Verify OTP</h1>
+        <div className="pt-0">
+            <div className="title-row justify-center">
+                <h1 className="welcome-title text-center">Verify OTP</h1>
             </div>
-            <p className="auth-subtitle" style={{ textAlign: 'center' }}>
+            <p className="auth-subtitle text-center">
                 We've sent a 6-digit code to {formData.contact}
             </p>
             <div className="otp-container">
@@ -70,19 +76,25 @@ const OtpVerification = () => {
                         onKeyDown={(e) => handleKeyDown(i, e)}
                         onPaste={i === 0 ? handlePaste : undefined}
                         autoComplete="one-time-code"
+                        disabled={isSubmitting}
                     />
                 ))}
             </div>
             <button
-                className={`auth-btn-primary ${!isComplete ? 'btn-disabled' : ''}`}
+                className={`auth-btn-primary ${(!isComplete || isSubmitting) ? 'btn-disabled' : ''}`}
                 onClick={handleVerify}
-                disabled={!isComplete}
+                disabled={!isComplete || isSubmitting}
                 style={{ margin: '30px auto 15px' }}
             >
-                Verify OTP
+                {isSubmitting ? 'Verifying...' : 'Verify OTP'}
             </button>
+            <div className="otp-back-link">
+                <a href="#" onClick={handleBack} className="auth-footer">
+                    Back
+                </a>
+            </div>
             <div className="auth-divider-flourish">
-                <img src={dividerImg} alt="" />
+                <img src={dividerImg} alt="decorative flourish" />
             </div>
         </div>
     );
