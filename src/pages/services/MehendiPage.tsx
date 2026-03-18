@@ -3,7 +3,7 @@ import { motion, Variants } from 'framer-motion';
 import { ChevronLeft, Scissors, Star, Phone, CalendarCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import mehendiImg from '../../assets/auth/wedding-mehndi.jpeg';
+import mehendiImg from '../../assets/auth/wedding-mehndi.png';
 
 const fadeInVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -16,15 +16,15 @@ const MehendiPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#FDFBF2] font-sans">
             <div className="relative h-[50vh] min-h-[400px] w-full">
-                <img 
-                    src={mehendiImg} 
-                    alt="Mehendi Artists" 
+                <img
+                    src={mehendiImg}
+                    alt="Mehendi Artists"
                     className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/40" />
-                
+
                 <div className="absolute top-0 left-0 right-0 p-6 z-10 flex items-center justify-between">
-                    <button 
+                    <button
                         onClick={() => navigate('/services')}
                         className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
                     >
@@ -35,7 +35,7 @@ const MehendiPage: React.FC = () => {
                     </div>
                 </div>
 
-                <motion.div 
+                <motion.div
                     variants={fadeInVariants}
                     initial="hidden"
                     animate="show"
@@ -50,7 +50,7 @@ const MehendiPage: React.FC = () => {
             </div>
 
             <main className="max-w-4xl mx-auto px-6 py-16 -mt-16 relative z-20">
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.6 }}

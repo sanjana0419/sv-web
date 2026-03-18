@@ -16,6 +16,11 @@ import MehendiPage from '../pages/services/MehendiPage';
 import InvitationPage from '../pages/services/InvitationPage';
 import MatchesPage from '../pages/matches/MatchesPage';
 import MatchProfilePage from '../pages/matches/MatchProfilePage';
+import MessagesPage from '../pages/messages/MessagesPage';
+import CallsPage from '../pages/calls/CallsPage';
+import ContactsPage from '../pages/contacts/ContactsPage';
+import NotificationsPage from '../pages/notifications';
+import ProfilePage from '../pages/profile/ProfilePage';
 
 const AppRoutes: React.FC = () => {
     return (
@@ -34,7 +39,15 @@ const AppRoutes: React.FC = () => {
                     <Route path="/services/invitation" element={<InvitationPage />} />
                     <Route path="/matches" element={<MatchesPage />} />
                     <Route path="/matches/:id" element={<MatchProfilePage />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="/messages" element={<MessagesPage />} />
+                    <Route path="/messages/:id" element={<MessagesPage />} />
+                    <Route path="/calls" element={<CallsPage />} />
+                    <Route path="/contacts" element={<ContactsPage />} />
+                    <Route path="/notifications" element={<NotificationsPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/explore" element={<HomePage />} />
+                    <Route path="/settings" element={<ProfilePage />} />
+                    <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

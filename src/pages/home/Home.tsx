@@ -7,10 +7,10 @@ import RecommendedProfiles from './components/RecommendedProfiles';
 import Sidebar from './components/Sidebar';
 import RightSidebar from './components/RightSidebar';
 import Gallery from './components/Gallery';
-import Messages from './components/Messages';
+
 
 const Home: React.FC = () => {
-    const [view, setView] = React.useState<'dashboard' | 'messages' | 'matches' | 'search' | 'services'>('dashboard');
+    const [view, setView] = React.useState<'dashboard' | 'matches' | 'search' | 'services'>('dashboard');
     const exploreRef = React.useRef<HTMLDivElement>(null);
 
     const handleExplore = () => {
@@ -73,16 +73,7 @@ const Home: React.FC = () => {
                             <Gallery />
                         </div>
                     </motion.div>
-                ) : view === 'messages' ? (
-                    <motion.div
-                        key="messages"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        className="max-w-[1700px] mx-auto lg:pl-48 lg:pr-12 min-h-screen"
-                    >
-                        <Messages />
-                    </motion.div>
+
                 ) : (
                     <motion.div
                         key="other"

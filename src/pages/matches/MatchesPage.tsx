@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Filter, Heart, Star, MapPin, Briefcase, GraduationCap, ChevronRight, UserPlus, Zap, ShieldCheck, MessageSquare } from 'lucide-react';
 import siddharthImg from '../../assets/matches/siddharth.png';
 
 // --- Types ---
@@ -15,57 +17,60 @@ interface MatchProfile {
     location: string;
     education: string;
     profession?: string;
+    isVerified: boolean;
 }
 
 // --- Mock Data ---
 const mockMatches: MatchProfile[] = [
     {
         id: '1',
-        name: 'Rohan Malhotra',
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&h=500&fit=crop', // Example realistic portrait
+        name: 'Sayali Sontakke',
+        image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=400&q=80',
+        matchPercentage: 92,
+        age: 26,
+        height: '5\'5"',
+        religion: 'Hindu',
+        caste: 'Maratha',
+        location: 'Pune, India',
+        education: 'B.Des (UI/UX)',
+        isVerified: true
+    },
+    {
+        id: '2',
+        name: 'Rohit Agarwal',
+        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
         matchPercentage: 88,
         age: 28,
         height: '5\'11"',
         religion: 'Hindu',
-        caste: 'Punjabi',
-        location: 'Mumbai, MH',
-        education: 'MBA Finance'
-    },
-    {
-        id: '2',
-        name: 'Amit Patel',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
-        matchPercentage: 92,
-        age: 30,
-        height: '5\'9"',
-        religion: 'Hindu',
-        caste: 'Gujarati',
-        location: 'Ahmedabad, GJ',
-        education: 'Software Architect'
+        caste: 'Marwari',
+        location: 'Mumbai, India',
+        education: 'B.Tech IT',
+        isVerified: true
     },
     {
         id: '3',
-        name: 'Sahil Deshmukh',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&h=500&fit=crop',
-        matchPercentage: 75,
+        name: 'John Alex',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+        matchPercentage: 84,
         age: 29,
-        height: '5\'10"',
-        religion: 'Hindu',
-        caste: 'Maratha',
-        location: 'Pune, MH',
-        education: 'IAS Officer'
+        height: '6\'0"',
+        religion: 'Christian',
+        location: 'Delhi, India',
+        education: 'MBA',
+        isVerified: false
     },
     {
         id: '4',
-        name: 'Vikram Singh',
-        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&h=500&fit=crop',
-        matchPercentage: 82,
+        name: 'Rosy Dane',
+        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80',
+        matchPercentage: 79,
         age: 27,
-        height: '6\'0"',
-        religion: 'Hindu',
-        caste: 'Rajput',
-        location: 'Delhi, NCR',
-        education: 'Pilot'
+        height: '5\'6"',
+        religion: 'Christian',
+        location: 'Bangalore, India',
+        education: 'M.Com',
+        isVerified: true
     },
     {
         id: '5',
@@ -77,7 +82,8 @@ const mockMatches: MatchProfile[] = [
         religion: 'Hindu',
         caste: 'Malayali',
         location: 'Bengaluru, KA',
-        education: 'Doctor'
+        education: 'Doctor',
+        isVerified: true
     },
     {
         id: '6',
@@ -89,7 +95,8 @@ const mockMatches: MatchProfile[] = [
         religion: 'Hindu',
         caste: 'Brahmin',
         location: 'Hyderabad, TS',
-        education: 'Data Scientist'
+        education: 'Data Scientist',
+        isVerified: true
     },
     {
         id: '7',
@@ -101,7 +108,8 @@ const mockMatches: MatchProfile[] = [
         religion: 'Hindu',
         caste: 'Kayastha',
         location: 'Lucknow, UP',
-        education: 'Entrepreneur'
+        education: 'Entrepreneur',
+        isVerified: false
     },
     {
         id: '8',
@@ -113,180 +121,166 @@ const mockMatches: MatchProfile[] = [
         religion: 'Hindu',
         caste: 'Telugu',
         location: 'Chennai, TN',
-        education: 'Civil Engineer'
+        education: 'Civil Engineer',
+        isVerified: true
     }
 ];
 
-// --- Main Component ---
 const MatchesPage: React.FC = () => {
     const navigate = useNavigate();
-    // Basic state for the form, functional in terms of holding values
-    // not implementing real filtering logic to keep it purely UI driven as requested
-    const [ageRange, setAgeRange] = useState('21 - 25');
-    const [religion, setReligion] = useState('Hindu');
-    const [location, setLocation] = useState('');
-    const [education, setEducation] = useState('All Degrees');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeFilter, setActiveFilter] = useState('All');
 
     return (
-        <div className="min-h-screen bg-[#FDFBF2] font-sans selection:bg-rose-100 selection:text-rose-600">
+        <div className="min-h-screen bg-[#FDFBF2] font-sans overflow-x-hidden relative">
+            {/* Elegant Background Accents */}
+            <div className="fixed top-[-10%] right-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-[#D4AF37]/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
+            <div className="fixed bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-tl from-[#801B1B]/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
+
             {/* Main Content Area */}
             <div className="max-w-[1700px] mx-auto px-6 py-12 md:px-12 relative z-20">
-                
-                {/* Header Titles */}
-                <div className="text-center mb-10 mt-16">
-                    <h1 className="text-4xl md:text-5xl font-bold font-serif text-rose-800 mb-2">Your Potential Matches</h1>
-                    <p className="text-gray-600 font-medium tracking-wide">Profiles selected based on your preferences</p>
-                </div>
 
-                <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    
-                    {/* Left Sidebar - Refine Search */}
-                    <div className="w-full lg:w-[320px] bg-white rounded-2xl shadow-sm border border-rose-100 p-8 sticky top-28 flex-shrink-0">
-                        <h2 className="text-2xl font-bold font-serif text-rose-800 text-center mb-8">Refine Search</h2>
-                        
-                        <div className="space-y-6">
-                            {/* Age Range */}
-                            <div className="flex flex-col items-center">
-                                <label className="text-sm font-medium text-gray-700 mb-2">Age Range</label>
-                                <select 
-                                    value={ageRange}
-                                    onChange={(e) => setAgeRange(e.target.value)}
-                                    className="w-full text-center py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 appearance-none cursor-pointer"
-                                >
-                                    <option>18 - 21</option>
-                                    <option>21 - 25</option>
-                                    <option>26 - 30</option>
-                                    <option>31 - 35</option>
-                                    <option>36+</option>
-                                </select>
+                {/* Header: Royal Reveal */}
+                <motion.header
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20 pt-16"
+                >
+                    <div className="max-w-2xl px-4">
+                        <h1 className="text-5xl md:text-7xl font-serif text-gray-900 tracking-tight leading-none">The Gathering</h1>
+                        <p className="text-[#c6862e] font-black text-[10px] uppercase tracking-[0.5em] mt-6 opacity-80">Souls woven by destiny & shared aspirations</p>
+                    </div>
+                </motion.header>
+
+                <div className="flex flex-col lg:flex-row gap-12 items-start">
+
+                    {/* Filter Deck: Glass Control Panel */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="w-full lg:w-[350px] bg-white/30 backdrop-blur-3xl rounded-[3.5rem] p-10 border border-white/50 shadow-2xl sticky top-28 flex-shrink-0"
+                    >
+                        <h2 className="text-2xl font-serif text-gray-900 mb-10 text-center tracking-tight">Refine Affinity</h2>
+
+                        <div className="space-y-10">
+                            <div>
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-4 text-center">Spiritual Origin</label>
+                                <div className="space-y-3">
+                                    {['All', 'Hindu', 'Christian', 'Sikh'].map(rel => (
+                                        <button
+                                            key={rel}
+                                            onClick={() => setActiveFilter(rel)}
+                                            className={`w-full py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${activeFilter === rel ? 'bg-[#c6862e] text-white shadow-xl' : 'bg-white/50 text-gray-400 hover:text-gray-900 border border-transparent hover:border-white/50'}`}
+                                        >
+                                            {rel}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
-                            {/* Religion */}
-                            <div className="flex flex-col items-center">
-                                <label className="text-sm font-medium text-gray-700 mb-2">Religion</label>
-                                <select 
-                                    value={religion}
-                                    onChange={(e) => setReligion(e.target.value)}
-                                    className="w-full text-center py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 appearance-none cursor-pointer"
-                                >
-                                    <option>Hindu</option>
-                                    <option>Muslim</option>
-                                    <option>Sikh</option>
-                                    <option>Christian</option>
-                                    <option>Other</option>
-                                </select>
-                            </div>
-
-                            {/* Location */}
-                            <div className="flex flex-col items-center">
-                                <label className="text-sm font-medium text-gray-700 mb-2">Location</label>
-                                <input 
+                            <div className="relative group">
+                                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#c6862e] transition-colors" size={18} />
+                                <input
                                     type="text"
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    placeholder="e.g. Mumbai, Pune"
-                                    className="w-full text-center py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 placeholder:text-gray-400"
+                                    placeholder="Search by essence..."
+                                    className="w-full bg-white/50 border border-white rounded-[2rem] py-5 pl-14 pr-6 text-sm font-bold text-gray-800 placeholder:text-gray-400 focus:bg-white focus:border-[#c6862e] outline-none transition-all"
                                 />
                             </div>
 
-                            {/* Education */}
-                            <div className="flex flex-col items-center">
-                                <label className="text-sm font-medium text-gray-700 mb-2">Education</label>
-                                <select 
-                                    value={education}
-                                    onChange={(e) => setEducation(e.target.value)}
-                                    className="w-full text-center py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-400 appearance-none cursor-pointer"
-                                >
-                                    <option>All Degrees</option>
-                                    <option>Bachelors</option>
-                                    <option>Masters</option>
-                                    <option>Doctorate</option>
-                                    <option>Undergraduate</option>
-                                </select>
-                            </div>
-
-                            {/* Apply Button */}
-                            <button className="w-full mt-6 bg-[#8B0000] hover:bg-rose-900 text-white font-bold py-3.5 px-6 rounded-full transition-colors shadow-md">
-                                Apply Filters
+                            <button className="w-full py-6 bg-[#1A1A1A] text-white rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.3em] hover:bg-[#c6862e] transition-all shadow-2xl hover:scale-[1.02] active:scale-95">
+                                Harmonize Results
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Right Grid - Profiles */}
-                    <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                        {mockMatches.map((profile) => (
-                            <div key={profile.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col h-full">
-                                
-                                {/* Image Container */}
-                                <div className="relative h-64 overflow-hidden">
-                                    <img 
-                                        src={profile.image} 
-                                        alt={profile.name} 
-                                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                                    />
-                                    {/* Match Badge */}
-                                    <div className="absolute top-4 right-4 bg-[#8B0000] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                                        {profile.matchPercentage}% Match
+                    {/* Right Grid: Profile Gallery */}
+                    <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+                        <AnimatePresence>
+                            {mockMatches.map((profile, i) => (
+                                <motion.div
+                                    key={profile.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    whileHover={{ y: -15, transition: { type: 'spring', stiffness: 300 } }}
+                                    className="bg-white/30 backdrop-blur-3xl rounded-[4rem] p-4 border border-white/50 shadow-2xl flex flex-col group relative overflow-hidden"
+                                >
+                                    {/* Cinematic Portrait */}
+                                    <div className="relative h-[450px] rounded-[3.5rem] overflow-hidden">
+                                        <img
+                                            src={profile.image}
+                                            alt={profile.name}
+                                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+
+                                        {/* Match Badge */}
+                                        <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-md text-[#c6862e] text-[10px] font-black px-5 py-2.5 rounded-2xl shadow-2xl border border-white flex items-center gap-2">
+                                            <Zap size={14} fill="currentColor" className="fill-[#c6862e]/20" />
+                                            {profile.matchPercentage}% Sync
+                                        </div>
+
+                                        {profile.isVerified && (
+                                            <div className="absolute top-6 left-6 p-2.5 bg-white/90 backdrop-blur-md rounded-xl text-[#c6862e] border border-white shadow-xl">
+                                                <ShieldCheck size={18} />
+                                            </div>
+                                        )}
+
+                                        <div className="absolute bottom-8 left-8">
+                                            <h3 className="text-3xl font-serif text-white mb-2 leading-tight">{profile.name}</h3>
+                                            <div className="flex items-center gap-4 text-white/70 text-sm font-bold tracking-tight">
+                                                <div className="flex items-center gap-1.5">
+                                                    <MapPin size={14} className="text-[#c6862e]" />
+                                                    {profile.location.split(',')[0]}
+                                                </div>
+                                                <span className="opacity-30">•</span>
+                                                <span>{profile.age} yrs</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Quick Action Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto">
+                                            <button className="w-16 h-16 rounded-full bg-white text-[#1A1A1A] flex items-center justify-center shadow-2xl transform translate-y-10 group-hover:translate-y-0 transition-all delay-75 hover:scale-110 active:scale-95">
+                                                <Heart size={26} className="text-[#801B1B]" />
+                                            </button>
+                                            <button
+                                                onClick={() => navigate(`/messages/${profile.id}`)}
+                                                className="w-16 h-16 rounded-full bg-[#c6862e] text-white flex items-center justify-center shadow-2xl transform translate-y-10 group-hover:translate-y-0 transition-all delay-150 hover:scale-110 active:scale-95"
+                                            >
+                                                <MessageSquare size={26} />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
-                                </div>
 
-                                {/* Content */}
-                                <div className="p-6 flex flex-col flex-1">
-                                    <h3 className="text-xl font-bold text-rose-900 text-center mb-6">{profile.name}</h3>
-                                    
-                                    {/* Info Grid */}
-                                    <div className="space-y-3 flex-1">
-                                        <div className="flex justify-between items-center text-sm border-b border-gray-50 pb-2">
-                                            <span className="text-gray-400 font-medium uppercase tracking-wider text-[10px]">AGE / HEIGHT</span>
-                                            <span className="text-gray-800 font-medium">{profile.age} yrs • {profile.height}</span>
+                                    {/* Footer Info */}
+                                    <div className="p-8 pt-10 flex flex-col flex-1">
+                                        <div className="grid grid-cols-2 gap-4 mb-10">
+                                            <div className="bg-white/50 py-4 px-4 rounded-3xl border border-white shadow-sm flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2 text-[#c6862e]">
+                                                    <GraduationCap size={14} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Knowledge</span>
+                                                </div>
+                                                <p className="text-[13px] font-black text-gray-800 tracking-tight truncate">{profile.education}</p>
+                                            </div>
+                                            <div className="bg-white/50 py-4 px-4 rounded-3xl border border-white shadow-sm flex flex-col">
+                                                <div className="flex items-center gap-2 mb-2 text-[#c6862e]">
+                                                    <Briefcase size={14} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Essence</span>
+                                                </div>
+                                                <p className="text-[13px] font-black text-gray-800 tracking-tight truncate">{profile.religion}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex justify-between items-center text-sm border-b border-gray-50 pb-2">
-                                            <span className="text-gray-400 font-medium uppercase tracking-wider text-[10px]">RELIGION</span>
-                                            <span className="text-gray-800 font-medium text-right">{profile.religion}{profile.caste ? `, ${profile.caste}` : ''}</span>
-                                        </div>
-                                        <div className="flex justify-between items-center text-sm border-b border-gray-50 pb-2">
-                                            <span className="text-gray-400 font-medium uppercase tracking-wider text-[10px]">LOCATION</span>
-                                            <span className="text-gray-800 font-medium text-right">{profile.location}</span>
-                                        </div>
-                                        <div className="flex justify-between items-center text-sm">
-                                            <span className="text-gray-400 font-medium uppercase tracking-wider text-[10px]">EDUCATION</span>
-                                            <span className="text-gray-800 font-medium text-right">{profile.education}</span>
-                                        </div>
-                                    </div>
 
-                                    {/* Actions */}
-                                    <div className="mt-8 space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            {/* Shortlist/Star */}
-                                            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-yellow-500 hover:border-yellow-200 hover:bg-yellow-50 transition-colors shrink-0">
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                                </svg>
-                                            </button>
-                                            {/* Like/Heart */}
-                                            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-colors shrink-0">
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                </svg>
-                                            </button>
-                                            {/* Send Interest */}
-                                            <button className="flex-1 bg-[#8B0000] hover:bg-rose-900 text-white font-semibold py-2.5 rounded-full transition-colors truncate px-2">
-                                                Send Interest
-                                            </button>
-                                        </div>
-                                        {/* View Full Profile */}
-                                        <button 
+                                        <button
                                             onClick={() => navigate(`/matches/${profile.id}`)}
-                                            className="w-full border-2 border-[#8B0000] text-[#8B0000] hover:bg-rose-50 font-semibold py-2.5 rounded-full transition-colors bg-white"
+                                            className="w-full py-6 bg-[#1A1A1A] text-white rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4 hover:shadow-2xl hover:bg-[#c6862e] transition-all group/btn"
                                         >
-                                            View Full Profile
+                                            View Essence <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
                                         </button>
                                     </div>
-
-                                </div>
-                            </div>
-                        ))}
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
                     </div>
 
                 </div>

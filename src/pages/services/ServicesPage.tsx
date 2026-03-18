@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Import images from assets/auth exactly as requested
 import cateringImg from '../../assets/auth/wedding-food.jpeg';
-import mehendiImg from '../../assets/auth/wedding-mehndi.jpeg';
+import mehendiImg from '../../assets/auth/wedding-mehndi.png';
 import jewelleryImg from '../../assets/auth/wedding-jewellery.jpeg';
 import venueImg from '../../assets/auth/wedding-venue.jpeg';
 import decorImg from '../../assets/auth/wedding-decor.jpeg';
@@ -85,7 +85,7 @@ const ServicesPage: React.FC = () => {
             {/* Header */}
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center gap-6">
-                    <button 
+                    <button
                         onClick={() => navigate(-1)}
                         className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-all"
                     >
@@ -100,14 +100,14 @@ const ServicesPage: React.FC = () => {
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-6 py-12 pb-24">
-                <motion.div 
+                <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     animate="show"
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
                     {servicesList.map((service) => (
-                        <motion.div 
+                        <motion.div
                             key={service.id}
                             variants={itemVariants}
                             whileHover={{ y: -8, scale: 1.02 }}
@@ -116,9 +116,9 @@ const ServicesPage: React.FC = () => {
                         >
                             {/* Image Section */}
                             <div className="relative h-64 overflow-hidden">
-                                <img 
-                                    src={service.image} 
-                                    alt={service.title} 
+                                <img
+                                    src={service.image}
+                                    alt={service.title}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                                 />
                                 <div className={`absolute inset-0 bg-gradient-to-b ${service.color} opacity-60 mix-blend-multiply`} />
@@ -133,7 +133,7 @@ const ServicesPage: React.FC = () => {
                                 <p className="text-gray-500 flex-1 leading-relaxed">
                                     {service.description}
                                 </p>
-                                
+
                                 <div className="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
                                     <span className="text-sm font-bold text-gray-900 uppercase tracking-wider">Explore Vendors</span>
                                     <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors">

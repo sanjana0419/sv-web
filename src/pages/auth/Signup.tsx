@@ -3,7 +3,7 @@ import { Globe } from 'lucide-react';
 import './signup.css';
 import weddingBg from '../../assets/auth/wedding.jpeg';
 import logoImg from '../../assets/auth/logo_v2.png';
-import kalashImg from '../../assets/auth/kalash.jpg';
+import kalashImg from '../../assets/auth/kalash.png';
 
 const Signup = () => {
     const [selectedLang, setSelectedLang] = React.useState('EN');
