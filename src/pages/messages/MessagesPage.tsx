@@ -1,419 +1,468 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import {
-    MessageSquare, Users, Bell, Video, Settings,
-    Search, Phone, Video as VideoIcon,
-    Send, Smile, Star, MapPin, ChevronRight,
-    ShieldCheck, Calendar, Home, Layers, Briefcase, ArrowLeft,
-    Grid, List as ListIcon, Info, Heart, MoreHorizontal, MoreVertical,
-    Paperclip, ImageIcon, Mic, Check, CheckCheck, X, Maximize2, 
-    MicOff, VideoOff, PhoneOff, Music, Ghost, Sparkles, Filter, Plus,
-    PhoneCall, UserPlus, Trash2, Clock, Globe, Compass, Layout, Zap,
-    SendHorizontal, Map
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import './MessagingSystem.css';
 
-// --- Types ---
-interface Message {
+interface Chat {
     id: number;
-    text: string;
-    sender: 'me' | 'them';
-    time: string;
-    status: 'sent' | 'delivered' | 'read';
-    type?: 'text' | 'location';
-    locationName?: string;
-    locationAddr?: string;
-}
-
-interface Contact {
-    id: string;
     name: string;
     avatar: string;
-    status: 'online' | 'offline';
     lastMessage: string;
     time: string;
     unread: number;
-    lastSeen?: string;
-    lastInteraction?: number;
+    online: boolean;
+    category: string;
+    age: number | null;
+    city: string;
+    profession: string;
+    education: string;
+    compatibility: string;
+    status: 'pending' | 'accepted' | 'sent';
+    pinned: boolean;
+    sharedInterests: string[];
 }
 
-// --- Mock Data ---
-const initialContacts: Contact[] = [
+interface Message {
+    id: number;
+    sender: 'them' | 'me';
+    text: string;
+    time: string;
+    status: 'read' | 'delivered' | 'sent';
+}
+
+const MOCK_CHATS: Chat[] = [
     {
-        id: '1',
-        name: 'Sayali Sontakke',
-        avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=400&q=80',
-        status: 'online',
-        lastMessage: "The wedding venue looks divine!",
-        time: '03:54',
-        unread: 0,
-        lastSeen: '19:00',
-        lastInteraction: Date.now() - 100000
+        id: 1,
+        name: "Ananya Singh",
+        avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&q=80",
+        lastMessage: "I would love to meet your family.",
+        time: "10:45 AM",
+        unread: 2,
+        online: true,
+        category: "Active Chats",
+        age: 26,
+        city: "Mumbai, MH",
+        profession: "Doctor",
+        education: "MBBS, MD",
+        compatibility: "92%",
+        status: "accepted",
+        pinned: true,
+        sharedInterests: ["Traveling", "Photography", "Reading"]
     },
     {
-        id: '2',
-        name: 'Rohit Agarwal',
-        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
-        status: 'offline',
-        lastMessage: "😊",
-        time: '18:59',
-        unread: 0,
-        lastSeen: 'Yesterday',
-        lastInteraction: Date.now() - 500000
+        id: 2,
+        name: "Sanya Verma",
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
+        lastMessage: "Interest Request Received",
+        time: "Yesterday",
+        unread: 1,
+        online: false,
+        category: "Interests Received",
+        age: 24,
+        city: "Pune, MH",
+        profession: "Software Engineer",
+        education: "B.Tech CA",
+        compatibility: "88%",
+        status: "pending",
+        pinned: false,
+        sharedInterests: ["Music", "Cooking"]
     },
     {
-        id: '3',
-        name: 'Pete Jackson',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-        status: 'online',
-        lastMessage: "You: Happy to hear that!",
-        time: '11:13',
+        id: 3,
+        name: "Rahul's Family",
+        avatar: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&q=80",
+        lastMessage: "Let's schedule a call this Sunday.",
+        time: "Tuesday",
         unread: 0,
-        lastInteraction: Date.now() - 1000000
+        online: true,
+        category: "Family Discussions",
+        age: null,
+        city: "Delhi, NCR",
+        profession: "Business",
+        education: "MBA",
+        compatibility: "N/A",
+        status: "accepted",
+        pinned: false,
+        sharedInterests: []
     },
     {
-        id: '4',
-        name: 'Elle Johnson',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-        status: 'offline',
-        lastMessage: "That's great, I'll see you there",
-        time: '02:53',
+        id: 4,
+        name: "Zara Khan",
+        avatar: "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=400&q=80",
+        lastMessage: "You sent an interest request.",
+        time: "12:30 PM",
         unread: 0,
-        lastInteraction: Date.now() - 2000000
-    },
-    {
-        id: '5',
-        name: 'Noah Pattinson',
-        avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
-        status: 'online',
-        lastMessage: "Hey checking this out!",
-        time: '17:01',
-        unread: 0,
-        lastInteraction: Date.now() - 3000000
+        online: true,
+        category: "Interests Sent",
+        age: 25,
+        city: "Delhi, NCR",
+        profession: "Interior Designer",
+        education: "B.Des",
+        compatibility: "85%",
+        status: "sent",
+        pinned: false,
+        sharedInterests: ["Art", "Design"]
     }
 ];
 
-const initialMessagesData: Record<string, Message[]> = {
-    '1': [
-        { id: 1, text: "Hey Sherry, What are you up to tonight?", sender: 'them', time: '18:56', status: 'read' },
-        { id: 2, text: "Hey, Sayali. Nothing, You?", sender: 'me', time: '18:57', status: 'read' },
-        { id: 3, text: "I just found this cool cafe down the street, check it out!", sender: 'them', time: '18:57', status: 'read' },
-        { 
-            id: 4, 
-            text: "", 
-            type: 'location',
-            locationName: "Ritz Cafe, San Fransico",
-            locationAddr: "123 Sanctuary Street, SF",
-            sender: 'them', 
-            time: '18:57', 
-            status: 'read' 
-        }
-    ]
-};
+const MOCK_MESSAGES: Message[] = [
+    { id: 1, sender: "them", text: "Hello! I saw your profile and really liked it.", time: "10:30 AM", status: "read" },
+    { id: 2, sender: "me", text: "Hi Ananya! Thank you. Your profile is quite interesting too.", time: "10:32 AM", status: "read" },
+    { id: 3, sender: "them", text: "I see we both enjoy traveling. Which was your last trip?", time: "10:35 AM", status: "read" },
+    { id: 4, sender: "me", text: "I went to Bali recently. How about you?", time: "10:40 AM", status: "read" },
+    { id: 5, sender: "them", text: "I would love to meet your family.", time: "10:45 AM", status: "delivered" }
+];
+
+const AI_SUGGESTIONS: string[] = [
+    "I would love that. How about this weekend?",
+    "Let's have a quick video call first?",
+    "Sure, I will share my parents' contact details."
+];
 
 const MessagesPage: React.FC = () => {
-    const navigate = useNavigate();
-    const { id: activeId } = useParams();
-    const location = useLocation();
-    
-    const [newMessage, setNewMessage] = useState('');
-    const [contacts, setContacts] = useState<Contact[]>(initialContacts);
-    const [messagesByContact, setMessagesByContact] = useState(initialMessagesData);
-    const [isCalling, setIsCalling] = useState(false);
-    const [callType, setCallType] = useState<'audio' | 'video'>('video');
-    const [searchTerm, setSearchTerm] = useState('');
-    
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [activeTab, setActiveTab] = useState<string>("All Chats");
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [selectedChatId, setSelectedChatId] = useState<number>(1);
+    const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
+    const [inputValue, setInputValue] = useState<string>("");
+    const [chatStatus, setChatStatus] = useState<string>("accepted");
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const [showFamilyModal, setShowFamilyModal] = useState<boolean>(false);
+    const [showMeetingModal, setShowMeetingModal] = useState<boolean>(false);
 
-    // Dynamic Filter & Sort: newly interacted ones on top
-    const filteredContacts = [...contacts]
-        .filter(c => 
-            c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            c.lastMessage.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .sort((a, b) => (b.lastInteraction || 0) - (a.lastInteraction || 0));
-    
-    const activeContact = filteredContacts.find(c => c.id === activeId) || filteredContacts[0] || initialContacts[0];
-    const messages = messagesByContact[activeContact.id] || [];
+    // Sidebar Resizing State
+    const [sidebarWidth, setSidebarWidth] = useState<number>(320);
+    const [isResizing, setIsResizing] = useState<boolean>(false);
+
+    // Safety
+    const [showSafetyWarning, setShowSafetyWarning] = useState<boolean>(true);
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    const activeChat = MOCK_CHATS.find(c => c.id === selectedChatId);
+
+    const tabs = [
+        { id: "All Chats", label: "All Chats", icon: "💬" },
+        { id: "Unread", label: "Unread", icon: "🔴" },
+        { id: "Interests Received", label: "Interests", icon: "❤️" },
+        { id: "Family Discussions", label: "Family", icon: "👥" }
+    ];
+
+    const handleSendMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!inputValue.trim()) return;
+        const newMsg: Message = {
+            id: messages.length + 1,
+            sender: "me",
+            text: inputValue,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            status: "sent"
+        };
+        setMessages([...messages, newMsg]);
+        setInputValue("");
+    };
+
+    const handleSuggestionClick = (text: string) => {
+        setInputValue(text);
+    };
 
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages, activeId]);
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
-    const handleSend = () => {
-        if (!newMessage.trim()) return;
-        
-        const now = Date.now();
-        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-        
-        const msg: Message = {
-            id: now,
-            text: newMessage,
-            sender: 'me',
-            time: timeStr,
-            status: 'sent'
+    useEffect(() => {
+        if (activeChat) {
+            setChatStatus(activeChat.status);
+            if (activeChat.id === 1) setMessages(MOCK_MESSAGES);
+            else setMessages([]);
+        }
+    }, [selectedChatId, activeChat]);
+
+    const startResizing = (e: React.MouseEvent) => {
+        setIsResizing(true);
+        e.preventDefault();
+    };
+
+    const stopResizing = () => {
+        setIsResizing(false);
+    };
+
+    const resize = (e: MouseEvent) => {
+        if (isResizing) {
+            const newWidth = Math.max(280, Math.min(e.clientX, 500));
+            setSidebarWidth(newWidth);
+        }
+    };
+
+    useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', resize);
+            window.addEventListener('mouseup', stopResizing);
+        } else {
+            window.removeEventListener('mousemove', resize);
+            window.removeEventListener('mouseup', stopResizing);
+        }
+        return () => {
+            window.removeEventListener('mousemove', resize);
+            window.removeEventListener('mouseup', stopResizing);
         };
+    }, [isResizing]);
 
-        // Update messages
-        setMessagesByContact(prev => ({ 
-            ...prev, 
-            [activeContact.id]: [...(prev[activeContact.id] || []), msg] 
-        }));
-
-        // Update contact last message and move to top
-        setContacts(prev => prev.map(c => 
-            c.id === activeContact.id 
-                ? { ...c, lastMessage: `You: ${newMessage}`, time: timeStr, lastInteraction: now } 
-                : c
-        ));
-
-        setNewMessage('');
-    };
-
-    const initiateCall = (type: 'audio' | 'video') => {
-        setCallType(type);
-        setIsCalling(true);
-    };
+    const filteredChats = MOCK_CHATS.filter(chat => {
+        let matchesTab = activeTab === "All Chats" || chat.category === activeTab;
+        if (activeTab === "Unread") matchesTab = chat.unread > 0;
+        if (activeTab === "Interests Received") matchesTab = chat.category === "Interests Received" || chat.category === "Interests Sent";
+        const matchesSearch = chat.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesTab && matchesSearch;
+    });
 
     return (
-        <div className="flex h-screen bg-[#FDFBF2] text-[#1A1A1A] font-sans overflow-hidden">
-            {/* 1. SIDEBAR RAIL */}
-            <aside className="w-[100px] border-r border-[#E8E4D5] flex flex-col items-center py-10 bg-[#FDFBF2]/80 backdrop-blur-md">
-                <div className="flex flex-col gap-10">
-                    <button 
-                        onClick={() => navigate('/home')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/home' ? 'text-[#c6862e]' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <Home size={28} />
-                    </button>
-
-                    <button 
-                        onClick={() => navigate('/matches')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/matches' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <Heart size={28} />
-                        {location.pathname === '/matches' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Soul</span>}
-                    </button>
-                    
-                    <button 
-                        onClick={() => navigate('/messages')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname.startsWith('/messages') ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <MessageSquare size={28} />
-                        {location.pathname.startsWith('/messages') && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Chats</span>}
-                    </button>
-
-                    <button 
-                        onClick={() => navigate('/calls')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/calls' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <Phone size={28} />
-                        {location.pathname === '/calls' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Calls</span>}
-                    </button>
-
-                    <button 
-                        onClick={() => navigate('/contacts')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/contacts' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <Users size={28} />
-                        {location.pathname === '/contacts' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Buddies</span>}
-                    </button>
-
-                    <button 
-                        onClick={() => navigate('/profile')} 
-                        className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/profile' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
-                    >
-                        <Settings size={28} />
-                        {location.pathname === '/profile' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Design</span>}
-                    </button>
-                </div>
-
-                <div className="mt-auto">
-                    <button className="text-gray-300 hover:text-gray-900"><MoreHorizontal size={32} /></button>
-                </div>
-            </aside>
-
-            {/* 2. CONTACT LIST */}
-            <section className="w-[450px] border-r border-[#E8E4D5] flex flex-col bg-white/40">
-                <header className="p-8">
-                    <div className="relative mb-8">
-                        <Search className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                        <input 
-                            type="text" 
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search contacts, conversations and more"
-                            className="w-full bg-white border border-[#E8E4D5] rounded-2xl py-4 px-6 text-sm outline-none focus:ring-1 ring-[#c6862e]/30 placeholder:text-gray-400"
+        <div className="msg-container glass-panel">
+            <div className="msg-sidebar" style={{ width: `${sidebarWidth}px` }}>
+                <div className="msg-sidebar-header">
+                    <h2>Messages</h2>
+                    <div className="msg-search-wrap">
+                        <svg className="msg-search-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" /></svg>
+                        <input
+                            type="text"
+                            placeholder="Search conversations..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-                </header>
-
-                <div className="flex-1 overflow-y-auto no-scrollbar pb-10">
-                    <AnimatePresence initial={false}>
-                        {filteredContacts.length > 0 ? (
-                            filteredContacts.map(contact => (
-                                <motion.div 
-                                    layout
-                                    key={contact.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    onClick={() => navigate(`/messages/${contact.id}`)}
-                                    className={`flex items-center gap-5 px-10 py-6 cursor-pointer transition-all border-b border-[#E8E4D5]/30 ${activeId === contact.id ? 'bg-white shadow-[0_10px_30px_rgba(198,134,46,0.05)]' : 'hover:bg-white/20'}`}
-                                >
-                                    <div className="relative">
-                                        <img src={contact.avatar} className="w-14 h-14 rounded-full object-cover shadow-md" alt="" />
-                                        {contact.status === 'online' && (
-                                            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <h4 className="text-base font-bold text-[#1A1A1A] truncate">{contact.name}</h4>
-                                            <span className="text-[11px] text-gray-400 font-medium">{contact.time}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-[13px] text-gray-500 truncate">{contact.lastMessage}</p>
-                                            {contact.unread > 0 && (
-                                                <div className="w-5 h-5 bg-[#c6862e] text-white text-[9px] font-black rounded-full flex items-center justify-center shadow-lg">
-                                                    {contact.unread}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))
-                        ) : (
-                            <div className="flex flex-col items-center justify-center pt-20 text-gray-400 gap-4">
-                                <Search size={48} strokeWidth={1} className="opacity-20" />
-                                <p className="text-sm font-bold uppercase tracking-widest">No spirits found</p>
-                            </div>
-                        )}
-                    </AnimatePresence>
                 </div>
-            </section>
+                <div className="msg-tabs">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            className={`msg-tab ${activeTab === tab.id ? "active" : ""}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            <span className="msg-tab-icon">{tab.icon}</span>
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+                <div className="msg-chat-list">
+                    {filteredChats.map(chat => (
+                        <div
+                            key={chat.id}
+                            className={`msg-chat-item ${selectedChatId === chat.id ? "active" : ""}`}
+                            onClick={() => setSelectedChatId(chat.id)}
+                        >
+                            <div className="msg-chat-avatar-wrap">
+                                <img src={chat.avatar} alt={chat.name} className="msg-chat-avatar" />
+                                {chat.online && <span className="msg-online-indicator"></span>}
+                            </div>
+                            <div className="msg-chat-details">
+                                <div className="msg-row">
+                                    <h4 className={`msg-chat-name ${chat.unread > 0 ? 'unread-bold' : ''}`}>
+                                        {chat.pinned && <span className="msg-pin-icon">📍</span>}
+                                        {chat.name}
+                                    </h4>
+                                    <span className={`msg-chat-time ${chat.unread > 0 ? 'unread-time' : ''}`}>
+                                        {chat.time}
+                                    </span>
+                                </div>
+                                <div className="msg-row msg-chat-preview-row">
+                                    <p className={`msg-chat-lastmsg ${chat.unread > 0 ? 'unread-bold' : ''}`}>
+                                        {chat.lastMessage}
+                                    </p>
+                                    {chat.unread > 0 && (
+                                        <span className="msg-unread-badge">{chat.unread}</span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-            {/* 3. CHAT CONTENT */}
-            <section className="flex-1 flex flex-col bg-[#FDFBF2]/50 relative">
-                {/* Chat Header */}
-                <header className="px-12 py-6 border-b border-[#E8E4D5] flex justify-between items-center bg-white/60 backdrop-blur-md">
-                    {activeContact && (
-                        <div className="flex items-center gap-5 cursor-pointer" onClick={() => navigate(`/matches/${activeContact.id}`)}>
-                            <img src={activeContact.avatar} className="w-12 h-12 rounded-full object-cover shadow-md" alt="" />
+            <div
+                className={`msg-sidebar-resizer ${isResizing ? 'resizing' : ''}`}
+                onMouseDown={startResizing}
+            />
+
+            {activeChat ? (
+                <div className="msg-main-panel">
+                    <div className="msg-chat-header">
+                        <div className="msg-header-info">
+                            <img src={activeChat.avatar} alt={activeChat.name} className="msg-header-avatar" />
                             <div>
-                                <h3 className="text-lg font-bold text-[#1A1A1A]">{activeContact.name}</h3>
-                                <p className="text-[11px] text-gray-400 font-medium uppercase tracking-widest">
-                                    {activeContact.lastSeen ? `Last Seen at ${activeContact.lastSeen}` : activeContact.status === 'online' ? 'Online' : 'Offline'}
+                                <h3 className="msg-header-name">{activeChat.name}</h3>
+                                <p className="msg-header-status">
+                                    {activeChat.age && `${activeChat.age} yrs • `}
+                                    {activeChat.city}
+                                    {activeChat.online ? <span className="online-text"> Online</span> : ''}
                                 </p>
                             </div>
+                            {activeChat.compatibility !== "N/A" && (
+                                <div className="msg-header-compat">
+                                    <span className="compat-score">{activeChat.compatibility}</span>
+                                    <span className="compat-label">Compatibility</span>
+                                </div>
+                            )}
                         </div>
-                    )}
-                    <div className="flex items-center gap-8 text-gray-400">
-                        <button className="hover:text-[#c6862e] transition-colors text-yellow-500"><Star size={24} fill="currentColor" /></button>
-                        <button onClick={() => initiateCall('audio')} className="hover:text-[#c6862e] transition-colors"><Phone size={24} /></button>
-                        <button onClick={() => initiateCall('video')} className="hover:text-[#c6862e] transition-colors"><VideoIcon size={24} /></button>
-                    </div>
-                </header>
-
-                {/* Message Feed */}
-                <div 
-                    className="flex-1 overflow-y-auto no-scrollbar p-12 space-y-8 bg-gradient-to-tr from-[#FDFBF2] via-[#FDFBF2] to-blue-50/20"
-                    style={{ backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(198,134,46,0.02) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(59,130,246,0.02) 0%, transparent 40%)' }}
-                >
-                    <div className="flex justify-center">
-                        <div className="bg-white px-6 py-2.5 rounded-2xl shadow-sm text-[11px] font-black uppercase tracking-widest text-gray-400">Today</div>
-                    </div>
-
-                    <div className="space-y-6">
-                        {messages.map((msg, i) => (
-                            <div key={i} className={`flex flex-col ${msg.sender === 'me' ? 'items-end' : 'items-start'}`}>
-                                {msg.type === 'location' ? (
-                                    <div className="w-[380px] bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-gray-100 p-6 space-y-4">
-                                        <h4 className="font-bold text-gray-900">{msg.locationName}</h4>
-                                        <div className="relative h-40 rounded-3xl overflow-hidden bg-blue-50 border border-gray-100 flex items-center justify-center group cursor-pointer">
-                                            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=14&size=400x400&key=YOUR_API_KEY')` }} />
-                                            <div className="relative z-10 w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-[#c6862e] shadow-xl group-hover:scale-110 transition-transform">
-                                                <Map size={24} />
-                                            </div>
-                                        </div>
-                                        <div className="flex justify-between items-center text-[11px] text-gray-400 font-bold uppercase tracking-widest">
-                                            <span>{msg.time}</span>
-                                        </div>
+                        <div className="msg-header-actions">
+                            <button className="msg-icon-btn" title="View Profile">👁️</button>
+                            <div className="msg-more-wrap">
+                                <button className="msg-icon-btn" onClick={() => setShowOptions(!showOptions)}>⋮</button>
+                                {showOptions && (
+                                    <div className="msg-dropdown">
+                                        <button onClick={() => setShowFamilyModal(true)}>Introduce Family</button>
+                                        <button onClick={() => setShowMeetingModal(true)}>Meet Planner</button>
+                                        <button>Request Kundali Match</button>
+                                        <button>Mute Notifications</button>
+                                        <button>Pin to Top</button>
+                                        <button>View Shared Interests</button>
+                                        <div className="msg-dropdown-divider"></div>
+                                        <button className="danger-text">Block User</button>
+                                        <button className="danger-text">Report Profile</button>
                                     </div>
-                                ) : (
-                                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className={`max-w-[65%] group`}>
-                                        <div className={`px-8 py-5 rounded-[2rem] shadow-xl text-sm font-bold leading-relaxed border ${msg.sender === 'me' ? 'bg-[#E1F1FF] text-[#1D4ED8] border-blue-100 rounded-tr-none' : 'bg-white text-gray-800 border-gray-50 rounded-tl-none'}`}>
-                                            {msg.text}
-                                        </div>
-                                        <div className={`mt-2 text-[11px] text-gray-400 font-bold ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>
-                                            {msg.time}
-                                        </div>
-                                    </motion.div>
                                 )}
                             </div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                    </div>
-                </div>
-
-                {/* Chat Input */}
-                <footer className="px-12 py-10">
-                    <div className="flex items-center gap-4 bg-white/60 p-2 rounded-[3.5rem] border border-white shadow-2xl backdrop-blur-xl">
-                        <div className="flex-1 bg-white border border-gray-100 rounded-full px-10 py-4 flex items-center shadow-inner">
-                            <input 
-                                type="text" 
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                                placeholder="Type your message"
-                                className="w-full bg-transparent border-none focus:ring-0 text-sm font-bold text-gray-800 placeholder:text-gray-300"
-                            />
-                            <button onClick={handleSend} className="ml-4 text-[#c6862e] hover:scale-110 transition-all">
-                                <SendHorizontal size={24} />
-                            </button>
                         </div>
-                        <button className="w-16 h-16 bg-white border border-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-[#c6862e] shadow-lg transition-all active:scale-95">
-                            <Paperclip size={24} />
-                        </button>
-                        <button className="w-16 h-16 bg-white border border-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-[#c6862e] shadow-lg transition-all active:scale-95">
-                            <Mic size={24} />
-                        </button>
                     </div>
-                </footer>
-            </section>
 
-            {/* Cinematic Call Overlay (Optional: only if call is active) */}
-            <AnimatePresence>
-                {isCalling && activeContact && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] bg-[#0A0A0A] flex flex-col items-center justify-center">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-[#1A1A1A] via-black to-[#2A2A2A]" />
-                        <motion.img initial={{ scale: 1.2, opacity: 0 }} animate={{ scale: 1, opacity: 0.1 }} transition={{ duration: 2 }} src={activeContact.avatar} className="absolute inset-0 w-full h-full object-cover grayscale blur-2xl pointer-events-none" />
-                        
-                        <div className="relative z-10 w-full max-w-6xl px-12 flex flex-col items-center gap-20">
-                            <div className="flex flex-col items-center gap-10 text-center">
-                                <motion.div animate={{ boxShadow: ["0 0 60px #c6862e22", "0 0 120px #c6862e66", "0 0 60px #c6862e22"] }} transition={{ duration: 4, repeat: Infinity }} className="relative">
-                                    <img src={activeContact.avatar} className="w-64 h-64 rounded-[6rem] object-cover border-8 border-white/10 shadow-3xl" />
-                                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-[#c6862e] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.4em] shadow-3xl border-4 border-[#0A0A0A] whitespace-nowrap">
-                                        {callType === 'video' ? 'Video' : 'Voice'} Resonance Active
-                                    </div>
-                                </motion.div>
-                                <div>
-                                    <h2 className="text-8xl font-serif text-white mb-6 tracking-tighter">{activeContact.name}</h2>
-                                    <div className="flex items-center justify-center gap-4 text-[#D4AF37] font-black text-sm uppercase tracking-[0.6em]">
-                                        <div className="w-3 h-3 bg-emerald-500 rounded-full animate-ping" /> Connection Synchronized
+                    {activeChat.category !== "Family Discussions" && (
+                        <div className="msg-profile-snapshot">
+                            <div className="snap-info">
+                                <strong>Education:</strong> {activeChat.education}
+                            </div>
+                            <div className="snap-info">
+                                <strong>Profession:</strong> {activeChat.profession}
+                            </div>
+                            {activeChat.sharedInterests.length > 0 && (
+                                <div className="snap-info">
+                                    <strong>Shared:</strong> {activeChat.sharedInterests.join(", ")}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {showSafetyWarning && (
+                        <div className="msg-safety-banner">
+                            <span className="safety-icon">🛡️</span>
+                            Safety Tip: Never share financial information. Report suspicious behavior.
+                            <button className="safety-close" onClick={() => setShowSafetyWarning(false)}>✖</button>
+                        </div>
+                    )}
+
+                    <div className="msg-chat-area">
+                        {chatStatus === "pending" ? (
+                            <div className="msg-interest-overlay">
+                                <div className="interest-card">
+                                    <h3>Interest Request Received</h3>
+                                    <p>{activeChat.name} wants to connect with you.</p>
+                                    <div className="interest-actions">
+                                        <button className="btn-accept" onClick={() => setChatStatus("accepted")}>Accept</button>
+                                        <button className="btn-decline">Decline</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="flex gap-12 items-center">
-                                <button className="w-24 h-24 rounded-[3.5rem] bg-white/5 text-white flex items-center justify-center border border-white/10 backdrop-blur-3xl hover:bg-white/10 transition-all hover:scale-110 active:scale-90"><MicOff size={36} /></button>
-                                <button onClick={() => setIsCalling(false)} className="w-36 h-36 rounded-[4.5rem] bg-[#801B1B] text-white flex items-center justify-center shadow-3xl hover:bg-rose-700 hover:scale-110 active:scale-95 transition-all outline-none border-t-4 border-rose-400/30"><PhoneOff size={56} /></button>
-                                <button className="w-24 h-24 rounded-[3.5rem] bg-white/5 text-white flex items-center justify-center border border-white/10 backdrop-blur-3xl hover:bg-white/10 transition-all hover:scale-110 active:scale-90"><VideoOff size={36} /></button>
+                        ) : chatStatus === "sent" ? (
+                            <div className="msg-interest-overlay">
+                                <div className="interest-card">
+                                    <h3>Interest Request Sent</h3>
+                                    <p>Waiting for {activeChat.name} to accept your request.</p>
+                                </div>
                             </div>
+                        ) : (
+                            <div className="msg-messages-list">
+                                {messages.length === 0 ? (
+                                    <div className="msg-conversation-starters">
+                                        <h4>Conversation Starters</h4>
+                                        <button onClick={() => setInputValue("Hello! I liked your profile and would like to know more about you.")}>
+                                            "Hello! I liked your profile and would like to know more about you."
+                                        </button>
+                                        <button onClick={() => setInputValue("Our profiles seem compatible. Would you like to connect?")}>
+                                            "Our profiles seem compatible. Would you like to connect?"
+                                        </button>
+                                    </div>
+                                ) : (
+                                    messages.map((msg) => (
+                                        <div key={msg.id} className={`msg-bubble-wrap ${msg.sender}`}>
+                                            <div className={`msg-bubble ${msg.sender}`}>
+                                                <p>{msg.text}</p>
+                                                <div className="msg-meta">
+                                                    <span className="msg-time">{msg.time}</span>
+                                                    {msg.sender === "me" && (
+                                                        <span className={`msg-receipt ${msg.status}`}>
+                                                            {msg.status === "read" ? "✓✓" : msg.status === "delivered" ? "✓✓" : "✓"}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+                        )}
+                    </div>
+
+                    {chatStatus === "accepted" && (
+                        <div className="msg-input-container">
+                            {messages.length > 0 && messages[messages.length - 1].sender === "them" && (
+                                <div className="msg-ai-suggestions">
+                                    <span className="ai-icon">✨ Smart Replies:</span>
+                                    {AI_SUGGESTIONS.map((sug, i) => (
+                                        <button key={i} onClick={() => handleSuggestionClick(sug)} className="ai-pill">{sug}</button>
+                                    ))}
+                                </div>
+                            )}
+
+                            <form className="msg-input-bar" onSubmit={handleSendMessage}>
+                                <input
+                                    type="text"
+                                    placeholder="Type a message..."
+                                    className="msg-input"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                />
+                                <button type="button" className="msg-action-btn">🙂</button>
+                                {inputValue.trim() && (
+                                    <button type="submit" className="msg-send-btn">➤</button>
+                                )}
+                            </form>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    )}
+                </div>
+            ) : (
+                <div className="msg-main-panel empty">
+                    <div className="empty-state">
+                        <div className="empty-icon">💬</div>
+                        <h3>Select a conversation</h3>
+                        <p>Choose a chat from the left or send a new interest to start talking.</p>
+                    </div>
+                </div>
+            )}
+
+            {showFamilyModal && (
+                <div className="msg-modal-overlay">
+                    <div className="msg-modal">
+                        <h3>Introduce Family</h3>
+                        <p>Involve your parents in the conversation.</p>
+                        <button className="modal-btn">Share Parent Contact</button>
+                        <button className="modal-btn">Invite to Group Chat</button>
+                        <button className="modal-btn">Schedule Family Call</button>
+                        <button className="modal-close" onClick={() => setShowFamilyModal(false)}>Close</button>
+                    </div>
+                </div>
+            )}
+
+            {showMeetingModal && (
+                <div className="msg-modal-overlay">
+                    <div className="msg-modal">
+                        <h3>Meeting Planner</h3>
+                        <p>Plan your next virtual or physical meet.</p>
+                        <input type="date" className="modal-input" />
+                        <input type="time" className="modal-input" />
+                        <button className="modal-btn submit">Schedule Meeting</button>
+                        <button className="modal-close" onClick={() => setShowMeetingModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
