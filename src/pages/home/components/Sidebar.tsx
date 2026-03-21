@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Home, Heart, Search, MessageSquare, Layers, Users, User, Bell } from 'lucide-react';
+import { chatService } from '../../../services/chatService';
 
 interface SidebarProps {
     currentView: 'dashboard' | 'matches' | 'search' | 'services';
@@ -10,6 +11,17 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
     const navigate = useNavigate();
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            const count = await chatService.getTotalUnreadCount();
+            setUnreadCount(count);
+        };
+        fetchCount();
+        const interval = setInterval(fetchCount, 5000); // Polling for changes
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="fixed left-8 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
@@ -52,9 +64,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
                 >
                     <div className="relative">
                         <MessageSquare size={26} strokeWidth={2.5} />
-                        <div className="absolute -top-3.5 -right-3.5 w-6 h-6 bg-[#801B1B] rounded-full text-[11px] font-black flex items-center justify-center text-white border-2 border-white/50 shadow-lg">
-                            3
-                        </div>
+                        {unreadCount > 0 && (
+                            <div className="absolute -top-3.5 -right-3.5 w-6 h-6 bg-[#801B1B] rounded-full text-[11px] font-black flex items-center justify-center text-white border-2 border-white/50 shadow-lg">
+                                {unreadCount}
+                            </div>
+                        )}
                     </div>
                     <span className="absolute left-24 px-5 py-2.5 bg-black text-white text-[10px] font-black rounded-2xl opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-2xl">Messages</span>
                 </button>
@@ -75,8 +89,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
                 >
                     <div className="relative">
                         <Bell size={26} strokeWidth={2.5} />
+                        {/* Static placeholder for notifications, could also be made dynamic */}
                         <div className="absolute -top-3.5 -right-3.5 w-6 h-6 bg-rose-600 rounded-full text-[11px] font-black flex items-center justify-center text-white border-2 border-white/50 shadow-lg group-hover:bg-white group-hover:text-rose-600 group-hover:border-rose-600 transition-colors">
-                            5
+                            0
                         </div>
                     </div>
                     <span className="absolute left-24 px-5 py-2.5 bg-black text-white text-[10px] font-black rounded-2xl opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 whitespace-nowrap pointer-events-none uppercase tracking-[0.2em] shadow-2xl">Aura Alerts</span>

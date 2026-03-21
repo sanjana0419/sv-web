@@ -81,7 +81,7 @@ const CallsPage: React.FC = () => {
                         className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/matches' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
                     >
                         <Heart size={28} />
-                        {location.pathname === '/matches' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Soul</span>}
+                        {location.pathname === '/matches' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Matches</span>}
                     </button>
 
                     <button 
@@ -105,7 +105,7 @@ const CallsPage: React.FC = () => {
                         className={`transition-all duration-300 flex flex-col items-center gap-2 ${location.pathname === '/contacts' ? 'w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#c6862e] shadow-xl border border-gray-100' : 'text-gray-400 hover:text-[#c6862e]'}`}
                     >
                         <Users size={28} />
-                        {location.pathname === '/contacts' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Buddies</span>}
+                        {location.pathname === '/contacts' && <span className="text-[10px] font-black uppercase text-[#c6862e] tracking-widest leading-none">Connections</span>}
                     </button>
 
                     <button 
@@ -174,8 +174,8 @@ const CallsPage: React.FC = () => {
                     <div className="w-40 h-40 bg-white rounded-[3rem] shadow-xl border border-white flex items-center justify-center mx-auto text-[#c6862e]">
                         <Zap size={64} />
                     </div>
-                    <h2 className="text-4xl font-serif text-gray-900 tracking-tight">Celestial Connection</h2>
-                    <p className="text-gray-500 leading-relaxed text-lg">Your audio and video frequency is ready for synchronisation. Tap a contact to begin your soul resonance.</p>
+                    <h2 className="text-4xl font-serif text-gray-900 tracking-tight">Connect with Your Match</h2>
+                    <p className="text-gray-500 leading-relaxed text-lg">Engage in a safe and private conversation with your prospective matches. Choose a profile from your recent interactions to start a consultation.</p>
                 </div>
             </section>
 
@@ -190,7 +190,7 @@ const CallsPage: React.FC = () => {
                             <div className="flex flex-col items-center gap-10 text-center">
                                 <motion.div animate={{ boxShadow: ["0 0 60px #c6862e22", "0 0 120px #c6862e66", "0 0 60px #c6862e22"] }} transition={{ duration: 4, repeat: Infinity }} className="relative">
                                     <img src={activeRecord.avatar} className="w-64 h-64 rounded-[6rem] object-cover border-8 border-white/10 shadow-3xl" />
-                                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-[#c6862e] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.4em] shadow-3xl border-4 border-[#0A0A0A] whitespace-nowrap">Calling {activeRecord.name}...</div>
+                                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-[#c6862e] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.4em] shadow-3xl border-4 border-[#0A0A0A] whitespace-nowrap">Connecting with {activeRecord.name}...</div>
                                 </motion.div>
                                 <h2 className="text-8xl font-serif text-white mb-6 tracking-tighter">{activeRecord.name}</h2>
                             </div>

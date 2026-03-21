@@ -1,0 +1,39 @@
+/* Magic Card - Interactive Spotlight Border & Glow */
+.magic-card {
+    position: relative;
+    border-radius: inherit;
+    overflow: hidden;
+    padding: 1.5px;
+    /* The border width */
+    background: transparent;
+    transition: background 0.3s;
+    transform-style: preserve-3d;
+}
+
+.magic-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),
+            rgba(255, 255, 255, 0.45) 0%,
+            rgba(255, 255, 255, 0.1) 40%,
+            transparent 80%);
+
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.magic-card:hover::before {
+    opacity: 1;
+}
+
+.magic-card-content {
+    position: relative;
+
+    background: inherit;
+    border-radius: calc(inherit - 1px);
+    height: 100%;
+    width: 100%;
+    transform-style: preserve-3d;
+}

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     Bell, Home, Search, Star, MessageSquare, Settings, 
     ArrowLeft, Heart, UserPlus, Star as StarIcon, Info 
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const mockNotifications = [
     {
@@ -12,7 +12,7 @@ const mockNotifications = [
         type: 'match',
         user: 'Sayali Sontakke',
         avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=400&q=80',
-        text: 'sent you a resonance request.',
+        text: 'sent you a connection request.',
         time: '5m ago',
         isUnread: true
     },
@@ -21,16 +21,16 @@ const mockNotifications = [
         type: 'like',
         user: 'Rohit Agarwal',
         avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
-        text: 'admired your essence (liked your profile).',
+        text: 'liked your profile.',
         time: '2h ago',
         isUnread: false
     },
     {
         id: 3,
         type: 'system',
-        user: 'Celestial Bot',
+        user: 'System',
         avatar: 'https://images.unsplash.com/photo-1614850523296-e8c1d4704a96?auto=format&fit=crop&w=400&q=80',
-        text: 'Your Sanctuary profile is 90% complete. Add your aspirations to shine!',
+        text: 'Your profile is 90% complete. Complete your profile for better visibility.',
         time: 'Yesterday',
         isUnread: false
     }
@@ -38,9 +38,20 @@ const mockNotifications = [
 
 const NotificationsPage: React.FC = () => {
     const navigate = useNavigate();
+    const [notifications, setNotifications] = useState(mockNotifications);
+
+    const handleAction = (id: number, action: 'accept' | 'decline') => {
+        // Logic to remove notification after action
+        setNotifications(prev => prev.filter(n => n.id !== id));
+        // You could also add a toast or success message here
+    };
+
+    const markAllAsRead = () => {
+        setNotifications(prev => prev.map(n => ({ ...n, isUnread: false })));
+    };
 
     const navItems = [
-        { icon: <Home size={24} />, path: '/home', label: 'Sanctuary' },
+        { icon: <Home size={24} />, path: '/home', label: 'Home' },
         { icon: <Search size={24} />, path: '/explore', label: 'Explore' },
         { icon: <Star size={24} />, path: '/matches', label: 'Matches' },
         { icon: <MessageSquare size={24} />, path: '/messages', label: 'Messages' },
@@ -76,26 +87,34 @@ const NotificationsPage: React.FC = () => {
                     <div className="flex items-center gap-10">
                         <button onClick={() => navigate(-1)} className="p-3 bg-white shadow-md rounded-2xl text-gray-400 hover:text-[#c6862e] transition-all"><ArrowLeft size={24} /></button>
                         <div>
-                            <h2 className="text-4xl font-serif text-gray-900 leading-none">Aura Alerts</h2>
-                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#c6862e] mt-2 opacity-60">Your spiritual activity feed</p>
+                            <h2 className="text-4xl font-serif text-gray-900 leading-none">Notifications</h2>
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#c6862e] mt-2 opacity-60">Stay updated with your latest profile activity</p>
                         </div>
                     </div>
                     <div className="hidden lg:flex gap-4">
-                        <button className="px-8 py-3 bg-white border border-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-[#c6862e] transition-all">Mark all as read</button>
+                        <button 
+                            onClick={markAllAsRead}
+                            className="px-8 py-3 bg-white border border-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-[#c6862e] transition-all"
+                        >
+                            Mark all as read
+                        </button>
                     </div>
                 </header>
 
                 <div className="flex-1 overflow-y-auto p-12 space-y-4 no-scrollbar">
                     <div className="max-w-4xl mx-auto space-y-6">
-                        <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#c6862e]">Recent Synchronizations</h3>
+                        <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#c6862e]">Recent Activity</h3>
                         
-                        {mockNotifications.map((notif) => (
-                            <motion.div
-                                key={notif.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`p-8 rounded-[3rem] border border-white flex items-center gap-8 group transition-all cursor-pointer ${notif.isUnread ? 'bg-white shadow-2xl relative' : 'bg-white/40 opacity-70 hover:opacity-100 hover:bg-white/60'}`}
-                            >
+                        <AnimatePresence>
+                        {notifications.length > 0 ? (
+                            notifications.map((notif) => (
+                                <motion.div
+                                    key={notif.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, x: 20 }}
+                                    className={`p-8 rounded-[3rem] border border-white flex items-center gap-8 group transition-all cursor-pointer ${notif.isUnread ? 'bg-white shadow-2xl relative' : 'bg-white/40 opacity-70 hover:opacity-100 hover:bg-white/60'}`}
+                                >
                                 {notif.isUnread && <div className="absolute top-8 left-4 w-2 h-2 bg-[#c6862e] rounded-full animate-pulse" />}
                                 <div className="relative shrink-0">
                                     <img src={notif.avatar} className="w-16 h-16 rounded-[1.5rem] object-cover border-2 border-white shadow-lg" alt="" />
@@ -112,13 +131,30 @@ const NotificationsPage: React.FC = () => {
                                 <div className="flex items-center gap-4">
                                     {notif.type === 'match' && (
                                         <>
-                                            <button className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#c6862e] transition-all">Accept</button>
-                                            <button className="px-6 py-2.5 bg-white border border-gray-100 text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest hover:text-[#c6862e] transition-all">Decline</button>
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); handleAction(notif.id, 'accept'); }}
+                                                className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-[#c6862e] transition-all"
+                                            >
+                                                Accept
+                                            </button>
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); handleAction(notif.id, 'decline'); }}
+                                                className="px-6 py-2.5 bg-white border border-gray-100 text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest hover:text-[#c6862e] transition-all"
+                                            >
+                                                Decline
+                                            </button>
                                         </>
                                     )}
                                 </div>
                             </motion.div>
-                        ))}
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center pt-20 text-gray-400 gap-4">
+                            <Bell size={48} strokeWidth={1} className="opacity-20" />
+                            <p className="text-sm font-bold uppercase tracking-widest">No new notifications</p>
+                        </div>
+                    )}
+                    </AnimatePresence>
                     </div>
                 </div>
             </main>

@@ -4,107 +4,68 @@ import { Heart, MessageSquare, Eye, Camera, UserRoundPen, Settings, Gem, Home, P
 
 const RightSidebar: React.FC = () => {
     return (
-        <aside className="w-full space-y-10">
-            {/* Success Stories Card - Redesigned for Luxury */}
+        <aside className="w-full space-y-8">
+            {/* Success Stories Section */}
             <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-[2.5rem] border border-gray-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] overflow-hidden group cursor-pointer"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden"
             >
-                {/* Brand Header Section */}
-                <div className="bg-gradient-to-br from-[#801B1B] to-[#600D0D] p-10 pb-12 text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                    <div className="inline-block bg-white/10 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mb-12 border border-white/10">
-                        Sanctified Bonds
-                    </div>
-                    <div>
-                        <h3 className="text-3xl font-serif tracking-tight mb-2">Manoj & Kavitha</h3>
-                        <div className="flex items-center gap-2">
-                            <Sparkles size={12} className="text-[#D4AF37]" />
-                            <p className="text-[10px] font-black tracking-[0.2em] uppercase text-white/50">United Since 2024</p>
-                        </div>
-                    </div>
+                <div className="bg-[#801B1B] p-6 text-white">
+                    <span className="inline-block bg-black/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider mb-8">
+                        SUCCESS STORIES
+                    </span>
+                    <h3 className="text-xl font-bold mb-1">Manoj & Kavitha</h3>
+                    <p className="text-xs text-white/70 font-medium">Married 2024</p>
                 </div>
-
-                {/* Body Section */}
-                <div className="p-10 pt-8 bg-white relative">
-                    <div className="absolute -top-6 left-10 w-12 h-12 bg-[#c6862e] rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-white">
-                        <span className="text-2xl font-serif">"</span>
-                    </div>
-                    <p className="text-[15px] leading-relaxed text-gray-600 font-bold italic opacity-80 mt-2">
-                        "Our path crossed through SoulfulVivah, weaving a destiny we once only dreamed of. An eternal gratitude for this divine connection."
-                    </p>
-                    <button className="mt-8 text-[10px] font-black uppercase tracking-widest text-[#c6862e] flex items-center gap-2 group/btn">
-                        Explore Testimony <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
+                <div className="p-8 italic text-gray-600 text-[14px] leading-relaxed font-medium">
+                    "We found each other through ShubhVivah and it has been the best decision of our lives. Thank you for making our dreams come true!"
                 </div>
             </motion.div>
 
-            {/* Aura Analytics / Recent Activity */}
-            <div className="space-y-6">
-                <div className="flex items-center justify-between px-2">
-                    <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#c6862e]">Aura Analytics</h4>
-                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                </div>
-                <div className="bg-white/40 backdrop-blur-xl border border-white rounded-[3rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] overflow-hidden">
+            {/* Recent Activity Section */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-6">
+                <h4 className="text-base font-bold text-gray-800">Recent Activity</h4>
+                <div className="space-y-6">
                     {[
-                        { name: 'Resonances', count: '27k', icon: <Heart size={20} className="text-[#801B1B] fill-[#801B1B]/10" />, label: 'Likes' },
-                        { name: 'Whispers', count: '18k', icon: <MessageSquare size={20} className="text-[#c6862e] fill-[#c6862e]/10" />, label: 'Messages' },
-                        { name: 'Presence', count: '4.2k', icon: <Eye size={20} className="text-gray-400" />, label: 'Views' }
-                    ].map((item, i) => (
-                        <div key={item.name} className="flex justify-between items-center group cursor-pointer hover:bg-white transition-all p-7 border-b border-gray-50 last:border-0">
-                            <div className="flex items-center gap-5">
-                                <div className="w-13 h-13 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:bg-white group-hover:shadow-lg transition-all border border-transparent group-hover:border-gray-50">
+                        { label: 'Likes', count: '27K', icon: <Heart size={18} className="text-rose-500 fill-rose-500" /> },
+                        { label: 'Messages', count: '18K', icon: <MessageSquare size={18} className="text-blue-500 fill-blue-500" /> },
+                        { label: 'Profile Views', count: '4.2K', icon: <Eye size={18} className="text-emerald-500" /> }
+                    ].map((item) => (
+                        <div key={item.label} className="flex items-center justify-between group cursor-pointer">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-[#F0FAF5] flex items-center justify-center transition-all group-hover:scale-110 shadow-sm">
                                     {item.icon}
                                 </div>
-                                <div>
-                                    <span className="block text-base font-black text-gray-800">{item.name}</span>
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">{item.label}</span>
-                                </div>
+                                <span className="text-sm font-semibold text-gray-500">{item.label}</span>
                             </div>
-                            <span className="text-xl font-serif text-gray-900 group-hover:text-[#c6862e] transition-colors">{item.count}</span>
+                            <span className="text-base font-black text-gray-900">{item.count}</span>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Sacred Navigation / Quick Links */}
-            <div className="space-y-6">
-                <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#c6862e] px-2">Sacred Tools</h4>
-                <nav className="bg-white rounded-[3rem] border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] overflow-hidden">
+            {/* Quick Links Section */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-6">
+                <h4 className="text-base font-bold text-gray-800">Quick Links</h4>
+                <div className="space-y-5">
                     {[
-                        { name: 'Enrich Gallery', icon: <Camera size={20} />, color: 'bg-orange-50 text-orange-600' },
-                        { name: 'Refine Essence', icon: <UserRoundPen size={20} />, color: 'bg-indigo-50 text-indigo-600' },
-                        { name: 'Aura Settings', icon: <Settings size={20} />, color: 'bg-slate-50 text-slate-600' },
-                        { name: 'Evolve Journey', icon: <Gem size={20} />, color: 'bg-amber-50 text-amber-600' }
-                    ].map((item) => (
-                        <a key={item.name} href="#" className="flex items-center justify-between transition-all group p-7 hover:bg-gray-50/50 border-b border-gray-50 last:border-0">
-                            <div className="flex items-center gap-5">
-                                <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center transition-all group-hover:scale-110 shadow-sm border border-white/50`}>
-                                    {item.icon}
-                                </div>
-                                <span className="text-[14px] font-black tracking-tight text-gray-700 group-hover:text-gray-900">{item.name}</span>
-                            </div>
-                            <ChevronRight size={18} className="text-gray-200 group-hover:text-[#c6862e] group-hover:translate-x-1 transition-all" />
+                        { name: 'Add Photos', icon: '📸' },
+                        { name: 'Edit Profile', icon: '📝' },
+                        { name: 'Preferences', icon: '⚙️' },
+                        { name: 'Upgrade Plan', icon: '💎' }
+                    ].map((link) => (
+                        <a key={link.name} href="#" className="flex items-center gap-4 group transition-all">
+                            <span className="text-lg group-hover:scale-110 transition-transform">{link.icon}</span>
+                            <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900 group-hover:translate-x-1 transition-all">{link.name}</span>
                         </a>
                     ))}
-                </nav>
-            </div>
-
-            {/* Premium CTA */}
-            <div className="bg-gradient-to-br from-[#1A1A1A] to-black p-10 rounded-[3rem] relative overflow-hidden shadow-2xl border border-white/10 group cursor-pointer">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#c6862e]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <h5 className="text-xl font-serif text-white mb-4 relative z-10">Elite Membership</h5>
-                <p className="text-xs text-white/50 font-bold mb-8 leading-relaxed relative z-10 uppercase tracking-widest">
-                    Unlock private scrolls, instant resonances, and divine placement.
-                </p>
-                <button className="w-full py-5 bg-[#c6862e] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl hover:scale-[1.03] active:scale-95 transition-all">
-                    Ascend Now
-                </button>
+                </div>
             </div>
         </aside>
     );
 };
+
+
 
 export default RightSidebar;

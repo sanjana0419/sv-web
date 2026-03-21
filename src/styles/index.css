@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
   --font-serif: "Playfair Display", serif;
+  --font-luxury: "Cormorant Garamond", serif;
   --font-sans: "Poppins", sans-serif;
 
   --color-rose-50: #fff1f2;
@@ -16,6 +17,43 @@
   --color-rose-700: #be123c;
   --color-rose-800: #9f1239;
   --color-rose-900: #881337;
+}
+
+:root {
+    /* Brand Palette */
+    --crimson: #8E0E00;
+    --crimson-light: #C02425;
+    --crimson-deep: #4D0700;
+    --crimson-soft: rgba(142, 14, 0, 0.08);
+    
+    --gold: #D4A853;
+    --gold-warm: #E6C27A;
+    --gold-light: #F7E7C0;
+    
+    --violet: #8E44AD;
+    
+    /* Text */
+    --text-primary: #1A1A1A;
+    --text-secondary: #4A4A4A;
+    --text-muted: #8E8E8E;
+    
+    /* Surface & Glass */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-blur: blur(28px) saturate(1.8);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
+    
+    /* Shadows */
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.04);
+    --shadow-premium: 0 25px 60px rgba(142, 14, 0, 0.12);
+    
+    /* Transitions */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {

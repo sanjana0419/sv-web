@@ -125,6 +125,20 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
                 </button>
             </motion.div>
 
+            {/* Top Right Profile Section */}
+            <div className="absolute top-10 right-10 z-30">
+                <button 
+                    onClick={() => navigate('/profile')}
+                    className="flex items-center gap-4 bg-white/10 backdrop-blur-2xl p-1.5 rounded-full border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:bg-white/20 transition-all group outline-none"
+                >
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#801B1B] p-0.5 shadow-xl transition-transform group-hover:scale-110">
+                        <div className="w-full h-full rounded-full bg-black flex items-center justify-center relative">
+                            <span className="text-base font-black text-white">{userName.charAt(0).toUpperCase()}</span>
+                            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-black shadow-lg" />
+                        </div>
+                    </div>
+                </button>
+            </div>
         </div>
     );
 };

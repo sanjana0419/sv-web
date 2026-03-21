@@ -1,118 +1,276 @@
-import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import ProfileCompletion from './components/ProfileCompletion';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './HomePage.css';
+import ServicesSection from './ServicesSection';
+import ServicesView from './ServicesView';
+import MessagingSystem from './MessagingSystem';
 import RecommendedProfiles from './components/RecommendedProfiles';
-import Sidebar from './components/Sidebar';
-import RightSidebar from './components/RightSidebar';
-import Gallery from './components/Gallery';
+import './MagicCard.css';
 
+// Asset Imports - Adjusted to match project structure
+import brideImg from '../../assets/auth/bride.png';
+import groomImg from '../../assets/auth/groom.png';
 
-const Home: React.FC = () => {
-    const [view, setView] = React.useState<'dashboard' | 'matches' | 'search' | 'services'>('dashboard');
-    const exploreRef = React.useRef<HTMLDivElement>(null);
+interface HomeProps {
+    onNavigate?: (page: 'home' | 'dashboard') => void;
+}
 
-    const handleExplore = () => {
-        if (view !== 'dashboard') {
-            setView('dashboard');
-            setTimeout(() => {
-                exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        } else {
-            exploreRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }
+const Home: React.FC<HomeProps> = ({ onNavigate }) => {
+    const navigate = useNavigate();
+    const userName = "Pruthvi";
+    const [profilePercent] = useState(100);
+    const [displayPercent, setDisplayPercent] = useState(0);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [currentTipIndex, setCurrentTipIndex] = useState(0);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [activeNavTip, setActiveNavTip] = useState('Home');
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    const profileTips = [
+        "Add a professional photo (+15%)",
+        "Describe your hobbies and interests (+10%)",
+        "Add your education details (+10%)",
+        "Complete your career information (+15%)"
+    ];
+
+    // Magic Card Mouse Tracker
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const cards = document.querySelectorAll('.magic-card, .tilt-card');
+        cards.forEach(card => {
+            const htmlCard = card as HTMLElement;
+            const rect = htmlCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            htmlCard.style.setProperty('--mouse-x', `${x}px`);
+            htmlCard.style.setProperty('--mouse-y', `${y}px`);
+        });
     };
 
     useEffect(() => {
-        document.documentElement.style.scrollBehavior = 'smooth';
-        return () => {
-            document.documentElement.style.scrollBehavior = 'auto';
+        const duration = 8000;
+        const startTime = Date.now() + 1000;
+        
+        const updateCounter = () => {
+            const now = Date.now();
+            if (now < startTime) {
+                requestAnimationFrame(updateCounter);
+                return;
+            }
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easedVal = Math.floor(progress * profilePercent);
+            setDisplayPercent(easedVal);
+            if (progress < 1) requestAnimationFrame(updateCounter);
+            else setShowCelebration(true);
         };
+        requestAnimationFrame(updateCounter);
+    }, [profilePercent]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 80);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const marqueeImages = [
+        'https://images.unsplash.com/photo-1519741497674-611481863552?w=400',
+        'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400',
+        'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400',
+        'https://images.unsplash.com/photo-1519225421980-6923c89286f5?w=400',
+        'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=400',
+        'https://images.unsplash.com/photo-1519741497674-611481863552?w=400'
+    ];
+
     return (
-        <div className="min-h-screen bg-[#FDFBF2] font-sans selection:bg-rose-100 selection:text-rose-600 overflow-x-hidden">
-            {/* Sidebar - Floating Glassmorphism */}
-            <Sidebar currentView={view} onViewChange={setView} />
+        <div className={`home-page ${activeNavTip !== 'Home' ? 'hp-non-home' : ''}`} onMouseMove={handleMouseMove}>
+            
+            {/* TOP RIGHT NAV — Merged Notify + Profile Chips */}
+            <div className="hp-top-right-nav">
+                <button className="hp-notif-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+                    <span className="sn-badge">5</span>
+                </button>
+                <div className="hp-nav-separator"></div>
+                <div className="sn-user-wrap">
+                    <button className={`sn-avatar-btn${dropdownOpen ? ' active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        <div className="sn-avatar">{userName[0]}</div>
+                        <span className="sn-online-dot"></span>
+                    </button>
+                </div>
+            </div>
 
-            {/* Conditionally Render Views */}
-            <AnimatePresence mode="wait">
-                {view === 'dashboard' ? (
-                    <motion.div
-                        key="dashboard"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="w-full"
-                    >
-                        {/* Hero Section - Full Screen with Explore Interaction */}
-                        <Hero onExplore={handleExplore} />
-
-                        {/* Main Content Area - Revealed on Scroll */}
-                        <div ref={exploreRef} className="max-w-[1700px] mx-auto px-6 md:px-12 lg:pl-48 lg:pr-12 pb-20 relative z-20 mt-12 scroll-mt-20">
-                            <div className="flex flex-col lg:flex-row gap-10 items-start">
-                                {/* Left Column */}
-                                <main className="flex-1 w-full lg:w-[65%] space-y-12">
-                                    {/* Profile Completion */}
-                                    <ProfileCompletion />
-
-                                    {/* Main Feed */}
-                                    <RecommendedProfiles />
-                                </main>
-
-                                {/* Right Column - Success Stories & Activity */}
-                                <div className="hidden lg:block w-[400px]">
-                                    <RightSidebar />
-                                </div>
+            {/* MAROON SIDE NAV — Gooey Interaction Style */}
+            <nav className={`hp-sidenav ${isScrolled ? 'scrolled' : ''}`}>
+                <div className="sn-links">
+                    {[
+                        { tip: 'Home', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg> },
+                        { tip: 'Matches', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg> },
+                        { tip: 'Services', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5M2 12l10 5 10-5" /></svg> },
+                        { tip: 'Messages', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>, badge: 3 },
+                    ].map((item, i) => {
+                        const isActive = activeNavTip === item.tip;
+                        return (
+                            <div key={i} className={`sn-link${isActive ? ' active' : ''}`} data-tooltip={item.tip} onClick={() => setActiveNavTip(item.tip)}>
+                                {item.icon}
+                                {item.badge && <span className="sn-badge">{item.badge}</span>}
+                                <div className="sn-curve"></div>
                             </div>
+                        );
+                    })}
+                </div>
+            </nav>
+
+            {/* HERO BANNER — Infinite 3-Row Photo Wall */}
+            {activeNavTip === 'Home' && (
+                <section className="hp-hero">
+                    <div className="hp-hero-carousel-grid">
+                        <div className="hp-marquee-row row-left">
+                            {marqueeImages.map((img, i) => <img key={i} src={img} className="hp-marquee-img" alt="Wedding" />)}
                         </div>
-
-                        {/* Full Width Gallery/Services Section */}
-                        <div className="w-full">
-                            <Gallery />
+                        <div className="hp-marquee-row row-right">
+                            {[...marqueeImages].reverse().map((img, i) => <img key={i} src={img} className="hp-marquee-img" alt="Couple" />)}
                         </div>
-                    </motion.div>
-
-                ) : (
-                    <motion.div
-                        key="other"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex items-center justify-center min-h-screen lg:pl-48"
-                    >
-                        <div className="text-center">
-                            <h2 className="text-3xl font-black text-gray-900 mb-4 capitalize">{view} Section</h2>
-                            <p className="text-gray-500">This section is coming soon.</p>
-                            <button
-                                onClick={() => setView('dashboard')}
-                                className="mt-8 px-8 py-3 bg-[#c6862e] text-white rounded-full font-black shadow-lg"
-                            >
-                                Back to Dashboard
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-
-            {/* Footer */}
-            <footer className="bg-white py-12 border-t border-gray-100 mt-20">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                        <p className="text-gray-400 text-sm">© 2026 Shubh Vivah. All rights reserved.</p>
-                        <div className="flex gap-6">
-                            <a href="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-rose-600 transition-all">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" /></svg>
-                            </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-rose-600 transition-all">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z" /></svg>
-                            </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-rose-600 transition-all">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.063-1.366.333-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.67.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.67.072 4.947c.2 4.337 2.617 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.67-.014 4.947-.072c4.338-.2 6.78-2.617 6.98-6.98.058-1.281.072-1.689.072-4.948s-.014-3.67-.072-4.947c-.2-4.338-2.617-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072z" /></svg>
-                            </a>
+                        <div className="hp-marquee-row row-left">
+                            {marqueeImages.map((img, i) => <img key={i} src={img} className="hp-marquee-img" alt="Gallery" />)}
                         </div>
                     </div>
+                    <div className="hp-hero-overlay"></div>
+                    <div className="hp-hero-content">
+                        <div className="explore-pill">SHUBH MATRIMONY <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M6 9l6 6 6-6" /></svg></div>
+                        <h1 className="hero-title">Welcome back, <span className="hero-name">{userName}!</span></h1>
+                        <p className="hero-sub">Your journey to a perfect life partner continues</p>
+                    </div>
+                </section>
+            )}
+
+            {/* MAIN DASHBOARD CONTENT */}
+            <main className="hp-main">
+                <div className="hp-container">
+                    <div className="hp-layout">
+                        {activeNavTip === 'Home' ? (
+                            <div className="hp-left-col">
+                                <div className={`profile-card extreme-premium magic-card ${showCelebration ? 'celebrating' : ''}`}>
+                                    <div className="magic-card-content">
+                                        <div className="profile-card-top">
+                                            <div className="pc-user-avatar-wrap">
+                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="User" />
+                                            </div>
+                                            <div className="pc-text-content">
+                                                <div className="pc-title-row">
+                                                    <span className="profile-card-title">Profile Completion</span>
+                                                    <span className="pc-status-badge">{showCelebration ? 'Elite Member' : 'Step-up Profile'}</span>
+                                                </div>
+                                                <p className="pc-subtitle">
+                                                    Unlock maximum visibility! Complete your profile to get <b className="pc-highlight-text">5x more views.</b>
+                                                </p>
+                                            </div>
+                                            <div className="pc-percentage-badge">
+                                                <div className="pc-rolling-wrap">
+                                                    <span className="pc-rolling-pct">{displayPercent}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="profile-card-body">
+                                            <div className="progress-track" style={{ "--profile-target": `${displayPercent}%` } as any}>
+                                                <div className="pc-label-icon-wrap-right">
+                                                    <img src={brideImg} alt="Bride" className="pc-label-bride-icon" />
+                                                </div>
+                                                <div className="progress-fill"></div>
+                                                <div className="pc-traveler">
+                                                    <img src={groomImg} alt="Groom" className="pc-traveler-img" />
+                                                </div>
+                                            </div>
+                                            <div className="pc-footer-row">
+                                                <div className="pc-hint-container">
+                                                    <span className="pc-hint-icon">⚡</span>
+                                                    <span className="pc-hint-text active">Next step: {profileTips[currentTipIndex]}</span>
+                                                </div>
+                                                <button className="pc-dashboard-btn" onClick={() => onNavigate?.('dashboard')}>
+                                                    Dashboard
+                                                    <div className="btn-icon-circle">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <RecommendedProfiles />
+                            </div>
+                        ) : activeNavTip === 'Services' ? (
+                            <ServicesView />
+                        ) : activeNavTip === 'Messages' ? (
+                            <MessagingSystem />
+                        ) : (
+                            <div className="hp-left-col blank-page-view">
+                                <h1 className="hero-title">{activeNavTip} coming soon...</h1>
+                            </div>
+                        )}
+
+                        <aside className="hp-right-col">
+                            {activeNavTip === 'Home' && (
+                                <>
+                                    <div className="sidebar-card success-card">
+                                        <div className="magic-card-content">
+                                            <div className="success-header">
+                                                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400" className="success-couple-img" alt="Couple" />
+                                                <div className="success-label">Success Stories</div>
+                                                <div className="success-header-overlay">
+                                                    <div className="success-couple-names">Manoj & Kavitha</div>
+                                                    <div className="success-couple-tag">Married 2024</div>
+                                                </div>
+                                            </div>
+                                            <div className="success-body">
+                                                <p className="success-quote">"We found each other through ShubhMatrimony and it was the best decision of our lives."</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="sidebar-card activity-card">
+                                        <div className="sidebar-card-title">Recent Activity</div>
+                                        <div className="magic-card-content activity-list">
+                                            <div className="activity-item">
+                                                <div className="activity-icon likes">❤</div>
+                                                <div className="activity-label">Likes Received</div>
+                                                <div className="activity-count">2.4K</div>
+                                            </div>
+                                            <div className="activity-item">
+                                                <div className="activity-icon messages">💬</div>
+                                                <div className="activity-label">New Messages</div>
+                                                <div className="activity-count">18</div>
+                                            </div>
+                                            <div className="activity-item">
+                                                <div className="activity-icon views">👁</div>
+                                                <div className="activity-label">Profile Views</div>
+                                                <div className="activity-count">482</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="sidebar-card quick-links-card">
+                                        <div className="sidebar-card-title">Account Tools</div>
+                                        <div className="magic-card-content quick-links-list">
+                                            <a href="#" className="quick-link-item">📸 Add New Photos</a>
+                                            <a href="#" className="quick-link-item">✏ Edit Core Profile</a>
+                                            <a href="#" className="quick-link-item">⚙ Privacy Settings</a>
+                                            <a href="#" className="quick-link-item">💎 Upgrade to Premium</a>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </aside>
+                    </div>
+                </div>
+            </main>
+
+            {activeNavTip === 'Home' && <ServicesSection />}
+
+            <footer className="hp-footer">
+                <div className="hp-container footer-inner">
+                    <p className="footer-copy">© 2026 ShubhMatrimony. All rights reserved.</p>
                 </div>
             </footer>
         </div>

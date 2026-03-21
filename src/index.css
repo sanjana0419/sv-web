@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* ===== SHUBH MATRIMONY — PREMIUM HOME PAGE ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --maroon: #800000;
+  --maroon-deep: #5a0000;
+  --maroon-light: #cc0e0e;
+  --maroon-soft: #ffffe4;
+  --gold: #f29850;
+  --gold-light: #f9b97a;
+  --gold-warm: #e07830;
+  --bg: #fffff0;
+  --bg-off: #ffffe4;
+  --text-dark: #2a1a18;
+  --text-body: #5c4440;
+  --text-muted: #8a7a76;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 100px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+  /* Glass effect variables */
+  --glass-bg: rgba(255, 252, 245, 0.30);
+  --glass-blur: blur(22px) saturate(1.6);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --radius-xl: 20px;
+  --radius-md: 10px;
+  --crimson: #8e0e00;
+  --crimson-light: rgba(142, 14, 0, 0.8);
+  --crimson-soft: rgba(142, 14, 0, 0.06);
+  --text-primary: #1a0a08;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: transparent;
+  color: var(--text-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}

@@ -1,0 +1,84 @@
+/* ===== QUICK ACTIONS — LIGHT GLASS BUTTONS ===== */
+
+.quick-actions-container {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.action-btn:active {
+    transform: scale(0.97);
+}
+
+.btn-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Primary — White glass */
+.action-primary {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--maroon);
+    box-shadow: 0 4px 16px rgba(128, 0, 0, 0.1);
+}
+
+.action-primary:hover {
+    background: white;
+    box-shadow: 0 8px 30px rgba(128, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Shimmer */
+.btn-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg,
+            transparent 30%,
+            rgba(212, 168, 83, 0.15) 45%,
+            rgba(212, 168, 83, 0.2) 50%,
+            rgba(212, 168, 83, 0.15) 55%,
+            transparent 70%);
+    animation: shimmerSlide 3s ease-in-out infinite;
+
+}
+
+@keyframes shimmerSlide {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Secondary — Maroon Tint */
+.action-secondary {
+    background: rgba(128, 0, 0, 0.05);
+    border: 1px solid rgba(128, 0, 0, 0.1);
+    color: var(--maroon);
+}
+
+.action-secondary:hover {
+    background: rgba(128, 0, 0, 0.1);
+    border-color: rgba(128, 0, 0, 0.2);
+    color: var(--maroon-deep);
+    transform: translateY(-2px);
+}

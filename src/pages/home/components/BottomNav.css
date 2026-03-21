@@ -1,0 +1,118 @@
+/* ===== BOTTOM NAV — LIGHT GLASS ===== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 12px 8px;
+    z-index: 2000;
+}
+
+.nav-glass-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(40px) saturate(1.5);
+    -webkit-backdrop-filter: blur(40px) saturate(1.5);
+    border-top: 1px solid rgba(142, 14, 0, 0.06);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.nav-items {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 8px 0 4px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.nav-item:hover {
+    color: var(--text-secondary, #666);
+}
+
+.nav-item.nav-active {
+    color: var(--crimson);
+}
+
+.nav-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.nav-active-indicator {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--crimson);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(142, 14, 0, 0.4), 0 0 16px rgba(142, 14, 0, 0.15);
+    animation: indicatorAppear 0.3s ease forwards;
+}
+
+@keyframes indicatorAppear {
+    from { transform: translateX(-50%) scale(0); }
+    to { transform: translateX(-50%) scale(1); }
+}
+
+.nav-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+/* Desktop Styles integrated into media query */
+@media (min-width: 1025px) {
+    /* Hide on very large desktops if sidebar is active */
+    /* .bottom-nav { display: none; } */
+}
+
+@media (min-width: 768px) {
+    .nav-items {
+        max-width: 900px;
+        gap: 8px;
+        padding: 10px 0;
+    }
+
+    .nav-item {
+        flex-direction: row;
+        gap: 8px;
+        padding: 8px 16px;
+    }
+
+    .nav-label {
+        font-size: 0.8rem;
+    }
+
+    .nav-active-indicator {
+        bottom: -2px;
+        width: 20px;
+        height: 3px;
+        border-radius: 2px;
+        transform: translateX(-50%);
+    }
+}
