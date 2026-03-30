@@ -1,19 +1,26 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/auth.css';
 import logoImg from '../../assets/auth/logo_v2.png';
 import weddingBg from '../../assets/auth/wedding.jpeg';
 
 interface LandingPageProps {
-    onComplete: () => void;
+    onComplete?: () => void;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onComplete }) => {
+    const navigate = useNavigate();
+
     useEffect(() => {
         const timer = setTimeout(() => {
-            onComplete();
-        }, 4000); // Slightly longer for premium feel
+            if (onComplete) {
+                onComplete();
+            } else {
+                navigate('/login');
+            }
+        }, 2000); // Shorter for better responsiveness
         return () => clearTimeout(timer);
-    }, [onComplete]);
+    }, [onComplete, navigate]);
 
     return (
         <div className="splash-screen">

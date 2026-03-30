@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "aos": "^2.3.4",
+    "axios": "^1.13.6",
     "framer-motion": "^12.35.0",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^0.454.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
@@ -21,8 +22,10 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@tailwindcss/postcss": "^4.2.2",
+    "@types/aos": "^3.0.7",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@types/rellax": "^1.7.7",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",

@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useRef, useEffect, useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Globe } from 'lucide-react';
 import '../../styles/auth.css';
 import logoImg from '../../assets/auth/logo_v2.png';
@@ -14,7 +15,7 @@ const SignupView = lazy(() => import('./register'));
 const OtpView = lazy(() => import('./otp'));
 const ResetPasswordView = lazy(() => import('./ResetPassword'));
 const CreatePasswordView = lazy(() => import('./CreatePassword'));
-const HomeView = lazy(() => import('../home/Home')); // ✅ Your homepage
+const HomeView = lazy(() => import('../home/HomePage')); // ✅ Your homepage
 
 // View component map — avoids switch statements
 const VIEW_COMPONENTS: Record<
@@ -41,12 +42,22 @@ const ViewLoader = () => (
 
 // Inner component that consumes AuthContext
 const AuthContent = () => {
-    const { view, prevView } = useAuth();
+    const { view, prevView, navigate: setAuthView } = useAuth();
+    const location = useLocation();
     const containerRef = useRef<HTMLDivElement>(null);
     const [animClass, setAnimClass] = useState('view-enter');
     const [selectedLang, setSelectedLang] = useState('EN');
 
     const languages = ['EN', 'HI', 'MR'];
+
+    // Sync view with URL
+    useEffect(() => {
+        if (location.pathname === '/register' || location.pathname === '/auth/register') {
+            setAuthView(AUTH_VIEWS.SIGNUP);
+        } else if (location.pathname === '/login' || location.pathname === '/auth/login') {
+            setAuthView(AUTH_VIEWS.LOGIN);
+        }
+    }, [location.pathname, setAuthView]);
 
     // Animated transitions on view change
     useEffect(() => {

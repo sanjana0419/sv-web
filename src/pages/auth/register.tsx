@@ -9,6 +9,7 @@ import dividerImg from '../../assets/auth/divider.png';
 
 const RegisterPage = () => {
     const { formData, setField, navigate, isSubmitting, setSubmitting } = useAuth();
+    const routerNavigate = useNavigate();
     const { errors, touchField, validateAll } = useFormValidation(formData, ['contact', 'name']);
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
@@ -82,7 +83,7 @@ const RegisterPage = () => {
                 </button>
             </form>
             <p className="auth-footer">
-                Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); !isSubmitting && navigate(AUTH_VIEWS.LOGIN); }}>Log In</a>
+                Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); !isSubmitting && routerNavigate('/login'); }}>Log In</a>
             </p>
         </div>
     );

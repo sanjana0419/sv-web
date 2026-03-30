@@ -10,7 +10,7 @@ export interface FamilyDetails {
 
 export interface PartnerPreferences {
     ageRange: [number, number];
-    heightRange: [string, string];
+    heightRange: string;
     religion: string;
     education: string;
     location: string;
@@ -40,6 +40,8 @@ export interface UserProfile {
     community: string;
     height: string;
     weight: string;
+    age: number;
+    complexion: string;
     maritalStatus: string;
     religion: string;
     motherTongue: string;
@@ -87,6 +89,8 @@ const initialProfile: UserProfile = {
     community: '',
     height: '',
     weight: '',
+    age: 0,
+    complexion: '',
     maritalStatus: '',
     religion: '',
     motherTongue: '',
@@ -103,7 +107,7 @@ const initialProfile: UserProfile = {
     },
     partnerPreferences: {
         ageRange: [21, 35],
-        heightRange: ["5'0\"", "6'5\""],
+        heightRange: "5'0\" - 6'5\"",
         religion: '',
         education: '',
         location: ''
@@ -122,34 +126,43 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     }, [profile]);
 
     const completeness = useMemo(() => {
-        const coreFields: (keyof UserProfile)[] = [
-            'name', 'gender', 'dob', 'mobile', 'image',
-            'maritalStatus', 'religion', 'community', 'motherTongue', 'height',
-            'education', 'profession', 'income',
-            'country', 'city',
-            'diet', 'drink', 'smoke'
-        ];
-        
         let filledCount = 0;
-        coreFields.forEach(field => {
-            const val = profile[field];
-            if (val && val.toString().trim() !== '') {
-                filledCount++;
-            }
-        });
+        // The form has 23 distinct input fields
+        const totalImportantFields = 23;
 
-        // Family
-        const familyFields: (keyof FamilyDetails)[] = ['fatherOccupation', 'motherOccupation', 'familyType', 'familyStatus'];
-        familyFields.forEach(field => {
-            if (profile.familyDetails[field] && profile.familyDetails[field].toString().trim() !== '') {
-                filledCount++;
-            }
-        });
-
-        // Hobbies
-        if (profile.hobbies.length > 0) filledCount++;
+        // Basic Profile
+        if (profile.name) filledCount++;
+        if (profile.age && profile.age >= 18) filledCount++;
+        if (profile.height) filledCount++;
+        if (profile.weight) filledCount++;
+        if (profile.complexion) filledCount++;
+        if (profile.maritalStatus) filledCount++;
+        if (profile.motherTongue) filledCount++;
+        if (profile.religion) filledCount++;
+        if (profile.city) filledCount++;
         
-        const totalImportantFields = coreFields.length + familyFields.length + 1;
+        // Education & Profession
+        if (profile.profession) filledCount++;
+        if (profile.companyName) filledCount++;
+        if (profile.education) filledCount++;
+        if (profile.income) filledCount++;
+        
+        // Family
+        if (profile.familyDetails.fatherOccupation) filledCount++;
+        if (profile.familyDetails.motherOccupation) filledCount++;
+        if (profile.familyDetails.siblings > 0) filledCount++;
+        if (profile.familyDetails.familyType) filledCount++;
+        
+        // Others
+        if (profile.bio && profile.bio.trim().length > 0) filledCount++;
+        if (profile.hobbies && profile.hobbies.length > 0) filledCount++;
+        
+        // Partner Pref
+        if (profile.partnerPreferences.ageRange) filledCount++;
+        if (profile.partnerPreferences.heightRange) filledCount++;
+        if (profile.partnerPreferences.education) filledCount++;
+        if (profile.partnerPreferences.location) filledCount++;
+
         return Math.min(100, Math.round((filledCount / totalImportantFields) * 100));
     }, [profile]);
 
