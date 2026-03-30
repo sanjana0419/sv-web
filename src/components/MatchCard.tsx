@@ -1,8 +1,20 @@
 import React, { useRef } from 'react';
 import './MatchCard.css';
 
-const MatchCard = ({ match, index = 0 }) => {
-    const cardRef = useRef(null);
+interface MatchCardProps {
+    match?: {
+        name: string;
+        age: number;
+        city: string;
+        matchPercentage: number;
+        image: string;
+        tags: string[];
+    };
+    index?: number;
+}
+
+const MatchCard: React.FC<MatchCardProps> = ({ match, index = 0 }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
 
     const data = match || {
         name: "User",
@@ -13,7 +25,7 @@ const MatchCard = ({ match, index = 0 }) => {
         tags: []
     };
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: React.MouseEvent) => {
         const card = cardRef.current;
         if (!card) return;
         const rect = card.getBoundingClientRect();

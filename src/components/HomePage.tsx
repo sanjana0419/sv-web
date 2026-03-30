@@ -3,6 +3,7 @@ import './HomePage.css';
 import ServicesSection from './ServicesSection';
 import ServicesView from './ServicesView';
 import MessagingSystem from './MessagingSystem';
+import MatchesPage from '../pages/matches/MatchesPage';
 import './MagicCard.css';
 import logoVideo from '../assets/0220 (1).mp4';
 import backVid from '../assets/backvid.mp4';
@@ -17,7 +18,11 @@ import carImg6 from '../assets/wedding-mehndi.jpg';
 import carImg7 from '../assets/wedding-decor.jpg';
 import sustImg from '../assets/sust.jpeg';
 
-const HomePage = ({ onNavigate }) => {
+interface HomePageProps {
+    onNavigate: (page: string) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     const userName = "Pruthvi";
     const [profilePercent, setProfilePercent] = useState(100);
     const [displayPercent, setDisplayPercent] = useState(0);
@@ -26,8 +31,8 @@ const HomePage = ({ onNavigate }) => {
     const [currentTipIndex, setCurrentTipIndex] = useState(0);
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeNavTip, setActiveNavTip] = useState('Home');
-    const dropdownRef = useRef(null);
-    const tiltRefs = useRef([]);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const tiltRefs = useRef<HTMLElement[]>([]);
 
     const profileTips = [
         "Add a professional photo (+15%)",
@@ -57,8 +62,8 @@ const HomePage = ({ onNavigate }) => {
 
 
     // Magic Card Mouse Tracker
-    const handleMouseMove = (e) => {
-        const cards = document.querySelectorAll('.magic-card');
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const cards = document.querySelectorAll<HTMLElement>('.magic-card');
         cards.forEach(card => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -74,7 +79,7 @@ const HomePage = ({ onNavigate }) => {
         const startTime = Date.now() + 1200; // Offset by the animation-delay (1.2s)
 
         // Robust Cubic Bezier solver (matches CSS 0.4, 0, 0.2, 1)
-        const solveBezier = (x, x1, y1, x2, y2) => {
+        const solveBezier = (x: number, x1: number, y1: number, x2: number, y2: number) => {
             const epsilon = 1e-6;
 
             // Cubic coefficients
@@ -86,9 +91,9 @@ const HomePage = ({ onNavigate }) => {
             const by = 3 * (y2 - y1) - cy;
             const ay = 1 - cy - by;
 
-            const sampleBezierX = (t) => ((ax * t + bx) * t + cx) * t;
-            const sampleBezierY = (t) => ((ay * t + by) * t + cy) * t;
-            const sampleBezierDerivativeX = (t) => (3 * ax * t + 2 * bx) * t + cx;
+            const sampleBezierX = (t: number) => ((ax * t + bx) * t + cx) * t;
+            const sampleBezierY = (t: number) => ((ay * t + by) * t + cy) * t;
+            const sampleBezierDerivativeX = (t: number) => (3 * ax * t + 2 * bx) * t + cx;
 
             // Find t for given x using Newton's method
             let t = x;
@@ -140,8 +145,8 @@ const HomePage = ({ onNavigate }) => {
     }, [profileTips.length, displayPercent]);
 
     useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setDropdownOpen(false);
             }
         };
@@ -426,7 +431,7 @@ const HomePage = ({ onNavigate }) => {
                                                                 "--rotate-mid": `${Math.random() * 720}deg`,
                                                                 "--rotate-end": `${Math.random() * 360}deg`,
                                                                 "--scale": `${0.6 + Math.random() * 0.7}`
-                                                            }}
+                                                            } as React.CSSProperties}
                                                         ></div>
                                                     ))}
                                                 </div>
@@ -474,7 +479,7 @@ const HomePage = ({ onNavigate }) => {
                                                 </div>
                                             </div>
                                             <div className="profile-card-body">
-                                                <div className="progress-track" style={{ "--profile-target": `${profilePercent}%` }}>
+                                                <div className="progress-track" style={{ "--profile-target": `${profilePercent}%` } as React.CSSProperties}>
                                                     <div className="pc-label-icon-wrap-right">
                                                         <img src={brideImg} alt="Bride" className="pc-label-bride-icon" />
                                                     </div>
@@ -596,6 +601,8 @@ const HomePage = ({ onNavigate }) => {
                             <ServicesView />
                         ) : activeNavTip === 'Messages' ? (
                             <MessagingSystem />
+                        ) : activeNavTip === 'Matches' ? (
+                            <MatchesPage />
                         ) : (
                             <div className="hp-left-col blank-page-view" style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent' }}>
                                 <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', width: '100%', maxWidth: '600px' }}>

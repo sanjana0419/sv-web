@@ -7,7 +7,11 @@ import DiscoveryMap from './DiscoveryMap';
 import KundaliSection from './KundaliSection';
 import Rellax from 'rellax';
 
-const Dashboard = () => {
+interface DashboardProps {
+    onNavigate?: (page: string) => void;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     useEffect(() => {
         const rellax = new Rellax('.rellax', {
             center: true
