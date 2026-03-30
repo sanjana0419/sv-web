@@ -85,7 +85,7 @@ const LoginPage = () => {
             </button>
 
             <p className="auth-footer">
-                Don't have an account ? <a href="#" onClick={(e) => { e.preventDefault(); !isSubmitting && navigate(AUTH_VIEWS.SIGNUP); }}>sign up</a>
+                Don't have an account ? <a href="#" onClick={(e) => { e.preventDefault(); !isSubmitting && routerNavigate('/register'); }}>sign up</a>
             </p>
         </form>
     );

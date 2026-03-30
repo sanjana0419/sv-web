@@ -1982,8 +1982,8 @@ body:has(.hp-sidenav.scrolled .sn-links:hover) .hp-main::before {
 
     pointer-events: auto;
     /* Enable hover */
-    animation: travelerEntrance 10s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 1.2s;
+    animation: travelerEntrance 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.5s;
 }
 
 @keyframes travelerEntrance {
@@ -2030,8 +2030,8 @@ body:has(.hp-sidenav.scrolled .sn-links:hover) .hp-main::before {
     position: relative;
 
     width: 0;
-    animation: fillEntrance 10s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 1.2s;
+    animation: fillEntrance 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.5s;
     box-shadow: 0 4px 12px rgba(204, 14, 14, 0.3);
     display: flex;
     align-items: center;
@@ -2059,8 +2059,8 @@ body:has(.hp-sidenav.scrolled .sn-links:hover) .hp-main::before {
     opacity: 0.3;
 
     width: 0;
-    animation: fillEntrance 10s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 1.2s;
+    animation: fillEntrance 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.5s;
 }
 
 .progress-phantom {
@@ -2072,8 +2072,8 @@ body:has(.hp-sidenav.scrolled .sn-links:hover) .hp-main::before {
     border-radius: 8px;
 
     width: 0;
-    animation: phantomEntrance 10s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 1.2s;
+    animation: phantomEntrance 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.5s;
 }
 
 @keyframes phantomEntrance {

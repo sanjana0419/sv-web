@@ -21,7 +21,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "services/ServicesSection.tsx",
+    "services/ServicesView.tsx"
   ],
   "exclude": [
     "node_modules"
