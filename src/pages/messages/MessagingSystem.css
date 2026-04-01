@@ -40,6 +40,12 @@
     border-radius: 3px;
 }
 
+@media (max-width: 768px) {
+    .msg-sidebar-resizer {
+        display: none;
+    }
+}
+
 .msg-sidebar-resizer:hover,
 .msg-sidebar-resizer.resizing {
     background: linear-gradient(180deg, #c9a87c 0%, #8b2332 50%, #c9a87c 100%);
@@ -306,6 +312,23 @@
     padding: 15px 30px;
     background: rgba(255, 255, 255, 0.95);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 15px;
+}
+
+.msg-back-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #8b2332;
+    padding: 0 5px;
+}
+
+@media (max-width: 768px) {
+    .msg-back-btn {
+        display: block;
+    }
 }
 
 .msg-header-info {
@@ -490,6 +513,7 @@
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 350px;
+    width: 90%;
 }
 
 .interest-card h3 {
@@ -612,6 +636,36 @@
     color: #81d4fa;
 }
 
+/* TYPING BUBBLE */
+.typing-bubble {
+    padding: 10px 15px !important;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: #888;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
 /* INPUT AREA */
 .msg-input-container {
     background: rgba(255, 255, 255, 0.9);
@@ -719,6 +773,7 @@
     padding: 30px;
     border-radius: 20px;
     width: 350px;
+    max-width: 90%;
     text-align: center;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
@@ -781,48 +836,110 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .msg-sidebar {
-        width: 100px;
-    }
-
-    .msg-sidebar-header h2,
-    .msg-search-wrap,
-    .msg-chat-name,
-    .msg-chat-lastmsg,
-    .msg-chat-time,
-    .msg-chat-unread {
-        display: none;
-    }
-
-    .msg-tabs {
-        display: none;
-    }
-
-    .msg-chat-item {
-        justify-content: center;
-        padding: 10px 0;
-    }
-
-    .msg-chat-avatar-wrap {
-        margin-right: 0;
+        width: 280px !important;
     }
 }
 
 @media (max-width: 768px) {
+    .msg-container {
+        height: 100vh;
+        overflow: hidden;
+    }
+
     .msg-sidebar {
-        width: 80px;
+        width: 100% !important;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 10;
+        transition: transform 0.3s ease;
+        background: #fcfcfc;
+    }
+
+    .msg-container.chat-open .msg-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .msg-main-panel {
+        width: 100% !important;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 5;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        background: #fcfcfc;
+    }
+
+    .msg-main-panel.mobile-active {
+        transform: translateX(0);
+        z-index: 15;
+    }
+
+    .msg-chat-header {
+        padding: 10px 15px;
     }
 
     .msg-header-info {
         gap: 10px;
     }
 
+    .msg-header-avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .msg-header-name {
+        font-size: 0.95rem;
+    }
+
+    .msg-header-status {
+        font-size: 0.75rem;
+    }
+
     .compat-label {
         display: none;
     }
 
+    .msg-header-compat {
+        padding: 2px 6px;
+    }
+
+    .msg-chat-area {
+        padding: 15px;
+    }
+
     .msg-bubble {
         max-width: 85%;
+    }
+
+    .msg-input-container {
+        padding: 10px;
+    }
+
+    .msg-sidebar-header {
+        padding: 15px 15px 10px;
+    }
+
+    .msg-sidebar-header h2 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .msg-chat-list {
+        padding: 8px;
+    }
+
+    .msg-chat-item {
+        padding: 10px;
+    }
+
+    .msg-chat-avatar {
+        width: 45px;
+        height: 45px;
     }
 }

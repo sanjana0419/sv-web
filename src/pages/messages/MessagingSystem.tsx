@@ -103,13 +103,18 @@ const MOCK_CHATS: Chat[] = [
     }
 ];
 
-const MOCK_MESSAGES: Message[] = [
-    { id: 1, sender: "them", text: "Hello! I saw your profile and really liked it.", time: "10:30 AM", status: "read" },
-    { id: 2, sender: "me", text: "Hi Ananya! Thank you. Your profile is quite interesting too.", time: "10:32 AM", status: "read" },
-    { id: 3, sender: "them", text: "I see we both enjoy traveling. Which was your last trip?", time: "10:35 AM", status: "read" },
-    { id: 4, sender: "me", text: "I went to Bali recently. How about you?", time: "10:40 AM", status: "read" },
-    { id: 5, sender: "them", text: "I would love to meet your family.", time: "10:45 AM", status: "delivered" }
-];
+const INITIAL_MESSAGES: Record<number, Message[]> = {
+    1: [
+        { id: 1, sender: "them", text: "Hello! I saw your profile and really liked it.", time: "10:30 AM", status: "read" },
+        { id: 2, sender: "me", text: "Hi Ananya! Thank you. Your profile is quite interesting too.", time: "10:32 AM", status: "read" },
+        { id: 3, sender: "them", text: "I see we both enjoy traveling. Which was your last trip?", time: "10:35 AM", status: "read" },
+        { id: 4, sender: "me", text: "I went to Bali recently. How about you?", time: "10:40 AM", status: "read" },
+        { id: 5, sender: "them", text: "I would love to meet your family.", time: "10:45 AM", status: "delivered" }
+    ],
+    2: [],
+    3: [],
+    4: []
+};
 
 const AI_SUGGESTIONS: string[] = [
     "I would love that. How about this weekend?",
@@ -120,13 +125,15 @@ const AI_SUGGESTIONS: string[] = [
 const MessagesPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("All Chats");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [selectedChatId, setSelectedChatId] = useState<number>(1);
-    const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
+    const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+    const [chatHistories, setChatHistories] = useState<Record<number, Message[]>>(INITIAL_MESSAGES);
+    const [isTyping, setIsTyping] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>("");
     const [chatStatus, setChatStatus] = useState<string>("accepted");
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const [showFamilyModal, setShowFamilyModal] = useState<boolean>(false);
     const [showMeetingModal, setShowMeetingModal] = useState<boolean>(false);
+    const [showMobileChat, setShowMobileChat] = useState<boolean>(false);
 
     // Sidebar Resizing State
     const [sidebarWidth, setSidebarWidth] = useState<number>(320);
@@ -138,6 +145,7 @@ const MessagesPage: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const activeChat = MOCK_CHATS.find(c => c.id === selectedChatId);
+    const currentMessages = selectedChatId ? (chatHistories[selectedChatId] || []) : [];
 
     const tabs = [
         { id: "All Chats", label: "All Chats", icon: "💬" },
@@ -146,35 +154,59 @@ const MessagesPage: React.FC = () => {
         { id: "Family Discussions", label: "Family", icon: "👥" }
     ];
 
-    const handleSendMessage = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!inputValue.trim()) return;
+    const handleSendMessage = (e?: React.FormEvent, customText?: string) => {
+        if (e) e.preventDefault();
+        const text = customText || inputValue;
+        if (!text.trim() || !selectedChatId) return;
+
         const newMsg: Message = {
-            id: messages.length + 1,
+            id: Date.now(),
             sender: "me",
-            text: inputValue,
+            text: text,
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             status: "sent"
         };
-        setMessages([...messages, newMsg]);
+        
+        const updatedHistory = [...(chatHistories[selectedChatId] || []), newMsg];
+        setChatHistories({
+            ...chatHistories,
+            [selectedChatId]: updatedHistory
+        });
         setInputValue("");
+
+        // Simulated Auto-Reply
+        setTimeout(() => {
+            setIsTyping(true);
+            setTimeout(() => {
+                const reply: Message = {
+                    id: Date.now() + 1,
+                    sender: "them",
+                    text: `That sounds interesting! Tell me more about it.`,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    status: "read"
+                };
+                setChatHistories(prev => ({
+                    ...prev,
+                    [selectedChatId]: [...(prev[selectedChatId] || []), reply]
+                }));
+                setIsTyping(false);
+            }, 2000);
+        }, 1000);
     };
 
     const handleSuggestionClick = (text: string) => {
-        setInputValue(text);
+        handleSendMessage(undefined, text);
     };
 
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [messages]);
+    }, [currentMessages, isTyping]);
 
     useEffect(() => {
         if (activeChat) {
             setChatStatus(activeChat.status);
-            if (activeChat.id === 1) setMessages(MOCK_MESSAGES);
-            else setMessages([]);
         }
     }, [selectedChatId, activeChat]);
 
@@ -217,7 +249,7 @@ const MessagesPage: React.FC = () => {
     });
 
     return (
-        <div className="msg-container glass-panel">
+        <div className={`msg-container glass-panel ${showMobileChat ? 'chat-open' : ''}`}>
             <div className="msg-sidebar" style={{ width: `${sidebarWidth}px` }}>
                 <div className="msg-sidebar-header">
                     <h2>Messages</h2>
@@ -248,7 +280,10 @@ const MessagesPage: React.FC = () => {
                         <div
                             key={chat.id}
                             className={`msg-chat-item ${selectedChatId === chat.id ? "active" : ""}`}
-                            onClick={() => setSelectedChatId(chat.id)}
+                            onClick={() => {
+                                setSelectedChatId(chat.id);
+                                setShowMobileChat(true);
+                            }}
                         >
                             <div className="msg-chat-avatar-wrap">
                                 <img src={chat.avatar} alt={chat.name} className="msg-chat-avatar" />
@@ -284,8 +319,11 @@ const MessagesPage: React.FC = () => {
             />
 
             {activeChat ? (
-                <div className="msg-main-panel">
+                <div className={`msg-main-panel ${showMobileChat ? 'mobile-active' : ''}`}>
                     <div className="msg-chat-header">
+                        <button className="msg-back-btn" onClick={() => setShowMobileChat(false)}>
+                            ←
+                        </button>
                         <div className="msg-header-info">
                             <img src={activeChat.avatar} alt={activeChat.name} className="msg-header-avatar" />
                             <div>
@@ -369,7 +407,7 @@ const MessagesPage: React.FC = () => {
                             </div>
                         ) : (
                             <div className="msg-messages-list">
-                                {messages.length === 0 ? (
+                                {currentMessages.length === 0 ? (
                                     <div className="msg-conversation-starters">
                                         <h4>Conversation Starters</h4>
                                         <button onClick={() => setInputValue("Hello! I liked your profile and would like to know more about you.")}>
@@ -380,21 +418,32 @@ const MessagesPage: React.FC = () => {
                                         </button>
                                     </div>
                                 ) : (
-                                    messages.map((msg) => (
-                                        <div key={msg.id} className={`msg-bubble-wrap ${msg.sender}`}>
-                                            <div className={`msg-bubble ${msg.sender}`}>
-                                                <p>{msg.text}</p>
-                                                <div className="msg-meta">
-                                                    <span className="msg-time">{msg.time}</span>
-                                                    {msg.sender === "me" && (
-                                                        <span className={`msg-receipt ${msg.status}`}>
-                                                            {msg.status === "read" ? "✓✓" : msg.status === "delivered" ? "✓✓" : "✓"}
-                                                        </span>
-                                                    )}
+                                    <>
+                                        {currentMessages.map((msg) => (
+                                            <div key={msg.id} className={`msg-bubble-wrap ${msg.sender}`}>
+                                                <div className={`msg-bubble ${msg.sender}`}>
+                                                    <p>{msg.text}</p>
+                                                    <div className="msg-meta">
+                                                        <span className="msg-time">{msg.time}</span>
+                                                        {msg.sender === "me" && (
+                                                            <span className={`msg-receipt ${msg.status}`}>
+                                                                {msg.status === "read" ? "✓✓" : msg.status === "delivered" ? "✓✓" : "✓"}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        ))}
+                                        {isTyping && (
+                                            <div className="msg-bubble-wrap them">
+                                                <div className="msg-bubble them typing-bubble">
+                                                    <div className="typing-dots">
+                                                        <span></span><span></span><span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                                 <div ref={messagesEndRef} />
                             </div>
@@ -403,7 +452,7 @@ const MessagesPage: React.FC = () => {
 
                     {chatStatus === "accepted" && (
                         <div className="msg-input-container">
-                            {messages.length > 0 && messages[messages.length - 1].sender === "them" && (
+                            {currentMessages.length > 0 && currentMessages[currentMessages.length - 1].sender === "them" && (
                                 <div className="msg-ai-suggestions">
                                     <span className="ai-icon">✨ Smart Replies:</span>
                                     {AI_SUGGESTIONS.map((sug, i) => (
@@ -429,7 +478,7 @@ const MessagesPage: React.FC = () => {
                     )}
                 </div>
             ) : (
-                <div className="msg-main-panel empty">
+                <div className={`msg-main-panel empty ${showMobileChat ? 'mobile-active' : ''}`}>
                     <div className="empty-state">
                         <div className="empty-icon">💬</div>
                         <h3>Select a conversation</h3>
