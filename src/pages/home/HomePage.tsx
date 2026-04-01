@@ -6,6 +6,7 @@ import { useProfile } from '../../context/ProfileContext';
 import ServicesSection from '../servicesforuser/ServicesSection';
 import ServicesView from '../servicesforuser/ServicesView';
 import MessagingSystem from '../messages/MessagingSystem';
+import MatchesPage from '../matches';
 import './MagicCard.css';
 import logoVideo from '../../assets/0220 (1).mp4';
 import backVid from '../../assets/backvid.mp4';
@@ -35,7 +36,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeNavTip, setActiveNavTip] = useState('Home');
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const tiltRefs = useRef([]);
+    const tiltRefs = useRef<HTMLElement[]>([]);
 
     const profileTips = [
         "Add a professional photo (+15%)",
@@ -66,7 +67,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
     // Magic Card Mouse Tracker
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const cards = document.querySelectorAll('.magic-card');
+        const cards = document.querySelectorAll<HTMLElement>('.magic-card');
         cards.forEach(card => {
             const htmlCard = card as HTMLElement;
             const rect = htmlCard.getBoundingClientRect();
@@ -590,6 +591,8 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                             <ServicesView />
                         ) : activeNavTip === 'Messages' ? (
                             <MessagingSystem />
+                        ) : activeNavTip === 'Matches' ? (
+                            <MatchesPage />
                         ) : (
                             <div className="hp-left-col blank-page-view" style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent' }}>
                                 <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', width: '100%', maxWidth: '600px' }}>
